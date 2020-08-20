@@ -39,6 +39,6 @@ if __name__ == '__main__':
         sample_dir="./result/celeba1024-2/",
         log_dir="./result/celeba1024-2/", 
         save_dir="./result/celeba1024-2/",
-        #num_workers=0
+        num_workers=0
     )
     # ====================================================================== 
