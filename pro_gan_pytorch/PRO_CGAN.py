@@ -279,7 +279,9 @@ class ConditionalProGAN:
         :return: None (Writes multiple files to disk)
         """
         from pro_gan_pytorch.DataTools import get_data_loader
-
+        print("#####")
+        print(self.depth)
+        print(len(batch_sizes))
         assert self.depth == len(batch_sizes), "batch_sizes not compatible with depth"
 
         # turn the generator and discriminator into train mode
