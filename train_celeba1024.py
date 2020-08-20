@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # hyper-parameters per depth (resolution)
     num_epochs = [40, 55, 60, 65,70,75,80,85,90]
     fade_ins = [100, 90, 80, 70, 60, 50, 40, 30, 20]
-    batch_sizes = [128, 128, 128, 64, 64, 64, 32, 32,32]
+    batch_sizes = [64, 64, 64, 64, 32, 32, 32, 16, 8]
     latent_size = 1024
 
 
