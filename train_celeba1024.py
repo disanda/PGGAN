@@ -2,7 +2,8 @@ import torch as th
 import torchvision as tv
 import sys
 sys.path.append('pro_gan_pytorch')
-import PRO_GAN_Again as pg
+#import PRO_GAN_Again as pg
+import Pro_GAN_Again as pg
 import torchvision
 from pro_gan_pytorch.DataTools import DatasetFromFolder
 
