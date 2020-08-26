@@ -89,7 +89,7 @@ class ProGAN:
         self.dis_optim = Adam(self.dis.parameters(), lr=learning_rate,betas=(beta_1, beta_2), eps=eps)
         # define the loss function used for training the GAN
         self.loss = self.__setup_loss(loss)
-        if self.use_ema:
+        if self.use_ema:                        #复制之前模块的参数
             # create a shadow copy of the generator
             self.gen_shadow = copy.deepcopy(self.gen)
             # updater function:
@@ -205,7 +205,7 @@ class ProGAN:
               fade_in_percentage, num_samples=64,
               start_depth=0, num_workers=4, feedback_factor=100,
               dataSet=None, log_dir="./models/", sample_dir="./samples/", save_dir="./models/",
-              checkpoint_factor=1):
+              checkpoint_factor=10):
         """
         Utility method for training the ProGAN. Note that you don't have to necessarily use this
         you can use the optimize_generator and optimize_discriminator for your own training routine.
