@@ -52,7 +52,7 @@ if __name__ == '__main__':
     # ======================================================================
     # This line creates the PRO-GAN
     # ======================================================================
-    pro_gan = pg.ProGAN(netG, netD1, depth=depth, latent_size=latent_size, device=device)
+    pro_gan = pg.ProGAN(netG, netD2, depth=depth, latent_size=latent_size, device=device)
 
     #data_path='/home/disanda/Desktop/dataSet/CelebAMask-HQ/CelebA-HQ-img'
     data_path='/_yucheng/dataSet/CelebAMask-HQ/CelebAMask-HQ/CelebA-HQ-img'
