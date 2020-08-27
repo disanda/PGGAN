@@ -13,6 +13,10 @@ import Encoder
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #data_path = "cifar-10/"
 
+def toggle_grad(model, requires_grad):
+    for p in model.parameters():
+        p.requires_grad_(requires_grad)
+
 if __name__ == '__main__':
     # some parameters:
     depth = 9 # 4-->8-->16-->32-->64-->128-->256-->512-->1024 ，0开始,8结束,所以depth是9
