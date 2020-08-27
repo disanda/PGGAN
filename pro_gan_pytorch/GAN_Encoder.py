@@ -225,7 +225,9 @@ class ProGAN:
                     gan_input = torch.randn(images.shape[0], self.latent_size).to(self.device)
                     # optimize
                     z = self.dis(images,height=epoch,alpha=1)
+                    print(z.shape)
                     z = z.squeeze(2).squeeze(2)
+                    print(z.shape)
                     x_ = self.gen(z,depth=epoch,alpha=1)
                     self.dis_optim.zero_grad()
                     loss = self.loss(x_,images)
