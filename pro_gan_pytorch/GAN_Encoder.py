@@ -99,8 +99,8 @@ class ProGAN:
         :param device: device to run the GAN on (GPU / CPU)
         """
         # Create the Generator and the Discriminator
-        self.gen = copy.deepcopy(netG)
-        self.dis = copy.deepcopy(netD2)
+        self.gen = netG
+        self.dis = netD
         del netG,netD2
         # if code is to be run on GPU, we can use DataParallel:
         if device == torch.device("cuda"):
