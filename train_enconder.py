@@ -6,7 +6,8 @@ sys.path.append('pro_gan_pytorch')
 import GAN_Encoder as pg
 import torchvision
 from pro_gan_pytorch.DataTools import DatasetFromFolder
-
+import net
+import Encoder
 
 # select the device to be used for training
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
