@@ -101,7 +101,7 @@ class ProGAN:
         # Create the Generator and the Discriminator
         self.gen = netG
         self.dis = netD
-        del netG,netD2
+        #del netG,netD2
         # if code is to be run on GPU, we can use DataParallel:
         if device == torch.device("cuda"):
             self.gen = DataParallel(self.gen)
