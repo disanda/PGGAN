@@ -3,7 +3,7 @@ import torchvision as tv
 import sys
 sys.path.append('pro_gan_pytorch')
 #import PRO_GAN_Again as pg
-import GAN_Endoer as pg
+import GAN_Encoder as pg
 import torchvision
 from pro_gan_pytorch.DataTools import DatasetFromFolder
 
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     fade_ins = [100, 90, 80, 70, 60, 50, 40, 30, 20]
     batch_sizes = [128, 128, 128, 128, 64, 64, 64, 32, 16]
     latent_size = 512
-    
+
     # ======================================================================
     # This line creates the PRO-GAN
     # ======================================================================
