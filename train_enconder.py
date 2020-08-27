@@ -52,12 +52,12 @@ if __name__ == '__main__':
     # ======================================================================
     # This line creates the PRO-GAN
     # ======================================================================
-    pro_gan = pg.ProGAN(netG, netD2, depth=depth, latent_size=latent_size, device=device)
+    pro_gan = pg.ProGAN(netG, netD2, depth=depth, latent_size=latent_size, device=device, use_ema=False)
 
     #data_path='/home/disanda/Desktop/dataSet/CelebAMask-HQ/CelebA-HQ-img'
     data_path='/_yucheng/dataSet/CelebAMask-HQ/CelebAMask-HQ/CelebA-HQ-img'
     trans = torchvision.transforms.ToTensor()
-    dataset = DatasetFromFolder(data_path,transform=trans,use_ema=False)
+    dataset = DatasetFromFolder(data_path,transform=trans)
 
     # This line trains the PRO-GAN
     pro_gan.train(
