@@ -9,7 +9,7 @@ from pro_gan_pytorch.DataTools import DatasetFromFolder
 
 
 # select the device to be used for training
-device = torch.device("cuda" if th.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #data_path = "cifar-10/"
 
 if __name__ == '__main__':
