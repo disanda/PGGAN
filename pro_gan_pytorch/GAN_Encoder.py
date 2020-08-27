@@ -73,7 +73,7 @@ del netD1
 #ProGAN Module (Unconditional)
 class ProGAN:
     """ Wrapper around the Generator and the Discriminator """
-    def __init__(self, depth=7, latent_size=512, learning_rate=0.001, beta_1=0,
+    def __init__(self,netG,netD, depth=7, latent_size=512, learning_rate=0.001, beta_1=0,
                  beta_2=0.99, eps=1e-8, drift=0.001, n_critic=1, use_eql=True,
                  loss="wgan-gp", use_ema=True, ema_decay=0.999,
                  device=torch.device("cpu")):

@@ -20,10 +20,33 @@ if __name__ == '__main__':
     batch_sizes = [128, 128, 128, 128, 64, 64, 64, 32, 16]
     latent_size = 512
 
+#----------------------配置预训练模型------------------
+    netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=512))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
+    netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location='cpu')) #shadow的效果要好一些 
+    netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
+    #netD.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location='cpu'))
+
+    netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
+    toggle_grad(netD1,False)
+    toggle_grad(netD2,False)
+
+    paraDict = dict(netD1.named_parameters()) # pre_model weight dict
+    for i,j in netD2.named_parameters():
+        if i in paraDict.keys():
+            w = paraDict[i]
+            j.copy_(w)
+
+    toggle_grad(netD2,True)
+
+    del netD1
+#print(netG)
+#print(netD1)
+
+
     # ======================================================================
     # This line creates the PRO-GAN
     # ======================================================================
-    pro_gan = pg.ProGAN(depth=depth, latent_size=latent_size, device=device)
+    pro_gan = pg.ProGAN(netG, netD1, depth=depth, latent_size=latent_size, device=device)
 
     #data_path='/home/disanda/Desktop/dataSet/CelebAMask-HQ/CelebA-HQ-img'
     data_path='/_yucheng/dataSet/CelebAMask-HQ/CelebAMask-HQ/CelebA-HQ-img'
