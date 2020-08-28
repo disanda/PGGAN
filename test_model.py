@@ -132,7 +132,7 @@ loss = torch.nn.MSELoss()
 loss_all=0
 for epoch in range(10):
 	for i in range(100):
-		z = torch.randn(16, 512).to(device)
+		z = torch.randn(10, 512).to(device)
 		x = netG(z,depth=8,alpha=1)
 		z_ = netD2(x,height=8,alpha=1)
 		z_ = z_.squeeze(2).squeeze(2)
@@ -143,7 +143,7 @@ for epoch in range(10):
 		optimizer.step()
 		print(loss_i.item())
 		loss_all +=loss_i.item()
-		print('loss_all'+str(loss_all))
+		print('loss_all__:  '+str(loss_all))
 		if i % 100 == 0: 
 			img = torch.cat(x[:8],x_[:8],aixs=1)
 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
