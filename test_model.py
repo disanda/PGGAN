@@ -143,7 +143,7 @@ for epoch in range(10):
 		loss_i.backward()
 		optimizer.step()
 		loss_all +=loss_i.item()
-		print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))_
+		print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
 		if i % 100 == 0: 
 			img = (torch.cat((x[:8],x_[:8]))+1)/2
 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
