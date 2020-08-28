@@ -14,11 +14,11 @@ if not os.path.exists(resultPath):
 
 resultPath1_1 = resultPath+"/imgs"
 if not os.path.exists(resultPath1_1):
-    os.mkdirs(resultPath)
+    os.mkdir(resultPath)
 
 resultPath1_2 = resultPath+"/models"
 if not os.path.exists(resultPath1_2):
-    os.mkdirs(resultPath)
+    os.mkdir(resultPath)
 
 #-----------------preModel-------------------
 # netG = torch.nn.DataParallel(pg.Generator(depth=9))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
