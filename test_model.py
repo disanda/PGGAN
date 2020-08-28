@@ -131,7 +131,7 @@ optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=
 loss = torch.nn.MSELoss()
 loss_all=0
 for epoch in range(10):
-	for i in range(100):
+	for i in range(1001):
 		z = torch.randn(10, 512).to(device)
 		with torch.no_grad():
 			x = netG(z,depth=8,alpha=1)
@@ -142,11 +142,10 @@ for epoch in range(10):
 		loss_i = loss(x_,x)
 		loss_i.backward()
 		optimizer.step()
-		print(loss_i.item())
 		loss_all +=loss_i.item()
-		print('loss_all__:  '+str(loss_all))
+		print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))_
 		if i % 100 == 0: 
-			img = torch.cat((x[:8],x_[:8]))
+			img = (torch.cat((x[:8],x_[:8]))+1)/2
 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
 			#torchvision.utils.save_image(x_[:8], resultPath1_1+'/%d_rc.jpg'%(epoch,i), nrow=8)
 	if epoch%10==0 or epoch == 29:
