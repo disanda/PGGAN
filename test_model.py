@@ -8,7 +8,15 @@ from pro_gan_pytorch.DataTools import DatasetFromFolder
 #device = 'cuda'
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-resultPath = "./result"
+resultPath = "./result/RC_1"
+if not os.path.exists(resultPath):
+    os.mkdir(resultPath)
+
+resultPath1_1 = resultPath+"/imgs"
+if not os.path.exists(resultPath):
+    os.mkdir(resultPath)
+
+resultPath1_2 = resultPath+"/models"
 if not os.path.exists(resultPath):
     os.mkdir(resultPath)
 
@@ -93,26 +101,57 @@ data = torch.utils.data.DataLoader(dataset=dataSet,batch_size=10,shuffle=True,nu
 #torchvision.utils.save_image(image, './1.jpg', nrow=1)
 
 
-#---------------training-------------
+#---------------training with true image-------------
+# optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
+# loss = torch.nn.MSELoss()
+# loss_all=0
+# for epoch in range(30):
+# 	for (i, batch) in enumerate(data):
+# 		image = batch.to(device)
+# 		z = netD2(image,height=8,alpha=1)
+# 		z = z.squeeze(2).squeeze(2)
+# 		x_ = netG(z,depth=8,alpha=1)
+# 		optimizer.zero_grad()
+# 		loss_i = loss(x_,image)
+# 		loss_i.backward()
+# 		optimizer.step()
+# 		print(loss_i.item())
+# 		loss_all +=loss_i.item()
+# 		print('loss_all'+str(loss_all))
+# 		if i % 100 == 0: 
+# 			torchvision.utils.save_image(image[:8], resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
+# 			torchvision.utils.save_image(x_[:8], resultPath1_1+'/%d_rc.jpg'%(epoch,i), nrow=8)
+# 	if epoch%10==0 or epoch == 29:
+# 		torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
+# 		torch.save(netD2.state_dict(), resultPath1_2+'/G_model.pth')
+
+
+#--------------training with generative image------------
 optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
 loss = torch.nn.MSELoss()
 loss_all=0
-for epoch in range(30):
-	for (i, batch) in enumerate(data):
-		image = batch.to(device)
-		z = netD2(image,height=8,alpha=1)
-		z = z.squeeze(2).squeeze(2)
-		x_ = netG(z,depth=8,alpha=1)
+for epoch in range(10):
+	for i in range(100):
+		z = torch.randn(16, 512).to(self.device)
+		x = netG(z)
+		z_ = netD2(x,height=8,alpha=1)
+		z_ = z_.squeeze(2).squeeze(2)
+		x_ = netG(z_,depth=8,alpha=1)
 		optimizer.zero_grad()
-		loss_i = loss(x_,image)
+		loss_i = loss(x_,x)
 		loss_i.backward()
 		optimizer.step()
 		print(loss_i.item())
 		loss_all +=loss_i.item()
 		print('loss_all'+str(loss_all))
 		if i % 100 == 0: 
-			torchvision.utils.save_image(image[:8], resultPath+'/%d.jpg'%i, nrow=8)
-			torchvision.utils.save_image(x_[:8], resultPath+'/%d_rc.jpg'%i, nrow=8)
+			img = torch.cat(x[:8],x_[:8],aixs=1)
+			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
+			#torchvision.utils.save_image(x_[:8], resultPath1_1+'/%d_rc.jpg'%(epoch,i), nrow=8)
+	if epoch%10==0 or epoch == 29:
+		torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
+		torch.save(netD2.state_dict(), resultPath1_2+'/G_model.pth')
+
 
 
 
