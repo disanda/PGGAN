@@ -18,16 +18,13 @@ class _equalized_conv2d(torch.nn.Module):
     def __init__(self, c_in, c_out, k_size, stride=1, pad=0, bias=True):
         """ constructor for the class """
         super().__init__()
-
         # define the weight and bias if to be used
         self.weight = torch.nn.Parameter(torch.nn.init.normal_(torch.empty(c_out, c_in, *_pair(k_size))))
         self.use_bias = bias
         self.stride = stride
         self.pad = pad
-
         if self.use_bias:
             self.bias = torch.nn.Parameter(torch.FloatTensor(c_out).fill_(0))
-
         fan_in = prod(_pair(k_size)) * c_in  # value of fan_in
         self.scale = sqrt(2) / sqrt(fan_in)
     def forward(self, x):
@@ -39,7 +36,6 @@ class _equalized_conv2d(torch.nn.Module):
         return conv2d(input=x,weight=self.weight * self.scale,  # scale the weight on runtime
                       bias=self.bias if self.use_bias else None,
                       stride=self.stride, padding=self.pad)
-
     def extra_repr(self):
         return ", ".join(map(str, self.weight.shape))
 
