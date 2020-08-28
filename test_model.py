@@ -8,6 +8,10 @@ from pro_gan_pytorch.DataTools import DatasetFromFolder
 #device = 'cuda'
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+resultPath = "./result"
+if not os.path.exists(resultPath):
+    os.mkdir(resultPath)
+
 #-----------------preModel-------------------
 # netG = torch.nn.DataParallel(pg.Generator(depth=9))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 # netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
@@ -94,7 +98,7 @@ optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=
 loss = torch.nn.MSELoss()
 loss_all=0
 for epoch in range(30):
-	for (i, batch) in enumerate(data)
+	for (i, batch) in enumerate(data):
 		image = batch.to(device)
 		z = netD2(image,height=8,alpha=1)
 		z = z.squeeze(2).squeeze(2)
@@ -107,8 +111,8 @@ for epoch in range(30):
 		loss_all +=loss_i.item()
 		print('loss_all'+str(loss_all))
 		if i % 100 == 0: 
-			torchvision.utils.save_image(image[:8], './%d.jpg'%i, nrow=1)
-			torchvision.utils.save_image(x_[:8], './%d_rc.jpg'%i, nrow=1)
+			torchvision.utils.save_image(image[:8], resultPath+'/%d.jpg'%i, nrow=8)
+			torchvision.utils.save_image(x_[:8], resultPath+'/%d_rc.jpg'%i, nrow=8)
 
 
 
