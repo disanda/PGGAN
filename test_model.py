@@ -84,8 +84,8 @@ toggle_grad(netD2,True)
 
 
 #------------------dataSet-----------
-#data_path='/_yucheng/dataSet/CelebAMask-HQ/CelebAMask-HQ/CelebA-HQ-img'
-data_path='/Users/apple/Desktop/CelebAMask-HQ/CelebA-HQ-img'
+data_path='/_yucheng/dataSet/CelebAMask-HQ/CelebAMask-HQ/CelebA-HQ-img'
+#data_path='/Users/apple/Desktop/CelebAMask-HQ/CelebA-HQ-img'
 trans = torchvision.transforms.ToTensor()
 dataSet = DatasetFromFolder(data_path,transform=trans)
 data = torch.utils.data.DataLoader(dataset=dataSet,batch_size=32,shuffle=True,num_workers=0,pin_memory=True)
