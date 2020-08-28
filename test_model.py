@@ -106,8 +106,9 @@ for epoch in range(30):
 		print(loss_i.item())
 		loss_all +=loss_i.item()
 		print('loss_all'+str(loss_all))
-		torchvision.utils.save_image(image[:8], './%d.jpg'%i, nrow=1)
-		torchvision.utils.save_image(x_[:8], './%d_rc.jpg'%i, nrow=1)
+		if i % 100 == 0: 
+			torchvision.utils.save_image(image[:8], './%d.jpg'%i, nrow=1)
+			torchvision.utils.save_image(x_[:8], './%d_rc.jpg'%i, nrow=1)
 
 
 
