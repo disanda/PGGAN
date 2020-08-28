@@ -146,7 +146,7 @@ for epoch in range(10):
 		loss_all +=loss_i.item()
 		print('loss_all__:  '+str(loss_all))
 		if i % 100 == 0: 
-			img = torch.cat(x[:8],x_[:8],aixs=1)
+			img = torch.cat((x[:8],x_[:8]))
 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
 			#torchvision.utils.save_image(x_[:8], resultPath1_1+'/%d_rc.jpg'%(epoch,i), nrow=8)
 	if epoch%10==0 or epoch == 29:
