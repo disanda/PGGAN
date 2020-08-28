@@ -13,11 +13,11 @@ if not os.path.exists(resultPath):
     os.mkdir(resultPath)
 
 resultPath1_1 = resultPath+"/imgs"
-if not os.path.exists(resultPath):
+if not os.path.exists(resultPath1_1):
     os.mkdirs(resultPath)
 
 resultPath1_2 = resultPath+"/models"
-if not os.path.exists(resultPath):
+if not os.path.exists(resultPath1_2):
     os.mkdirs(resultPath)
 
 #-----------------preModel-------------------
