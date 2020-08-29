@@ -233,7 +233,7 @@ class ProGAN:
               fade_in_percentage, num_samples=64,
               start_depth=0, num_workers=4, feedback_factor=100,
               dataSet=None, log_dir="./models/", sample_dir="./samples/", save_dir="./models/",
-              checkpoint_factor=10):
+              checkpoint_factor=1):
         """
         Utility method for training the ProGAN. Note that you don't have to necessarily use this
         you can use the optimize_generator and optimize_discriminator for your own training routine.
@@ -302,7 +302,7 @@ class ProGAN:
                     gen_loss = self.optimize_generator(gan_input, images, current_depth, alpha)
 
                     # provide a loss feedback
-                    if i % int(feedback_factor) == 0 or i == 1:
+                    if i % 101 == 0 or i == 1:
                         elapsed = time.time() - global_time
                         elapsed = str(datetime.timedelta(seconds=elapsed))
                         print("Elapsed: [%s]  batch: %d  d_loss: %f  g_loss: %f" % (elapsed, i, dis_loss, gen_loss))
@@ -325,7 +325,7 @@ class ProGAN:
                 stop = timeit.default_timer()
                 print("Time taken for epoch: %.3f secs" % (stop - start))
 
-                if epoch % checkpoint_factor == 5 or epoch == epochs[current_depth]:
+                if epoch % checkpoint_factor == 4 or epoch == epochs[current_depth]:
                     os.makedirs(save_dir, exist_ok=True)
                     gen_save_file = os.path.join(save_dir, "GAN_GEN_" + str(current_depth) + ".pth")
                     dis_save_file = os.path.join(save_dir, "GAN_DIS_" + str(current_depth) + ".pth")

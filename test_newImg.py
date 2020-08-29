@@ -17,7 +17,7 @@ netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=
 
 
 netD = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
-netD.load_state_dict(torch.load('./pre-model/AG_D_model_ep4.pth',map_location=device))
+netD.load_state_dict(torch.load('./pre-model/AG_D_model_ep9.pth',map_location=device))
 
 
 
@@ -43,5 +43,5 @@ for i,j in enumerate(data,0):
 		z_ = netD(j,height=8,alpha=1)
 		z_ = z_.squeeze(2).squeeze(2)
 		x = netG(z_,depth=8,alpha=1)
-		torchvision.utils.save_image(x, './ep4_%d_rc.jpg'%i, nrow=1)
+		torchvision.utils.save_image(x, './ep9_%d_rc.jpg'%i, nrow=1)
 
