@@ -40,6 +40,6 @@ if __name__ == '__main__':
         log_dir="./result/celeba1024/log/", 
         save_dir="./result/celeba1024/model/",
         num_workers=0,
-        start_depth=5
+        start_depth=8
     )
     # ====================================================================== 
