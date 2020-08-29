@@ -43,7 +43,7 @@ def update_average(model_tgt, model_src, beta):
 #----------------------------load pre-model-------------
 device= 'cuda'
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=1024))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
-netG.load_state_dict(torch.load('./result/pre-model/GAN_DIS_2.pth',map_location=device))
+netG.load_state_dict(torch.load('./result/pre-model/GAN_GEN_2.pth',map_location=device))
 #netG.load_state_dict({k.replace('module.',''):v for k,v in torch.load('./result/pre-model/GAN_GEN_SHADOW_3.pth').items()})
 
 
