@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # hyper-parameters per depth (resolution)
     num_epochs = [10, 10, 10, 10, 10, 10,10 ,10, 10]
     fade_ins = [100, 90, 80, 70, 60, 50, 40, 30, 20]
-    batch_sizes = [128, 128, 128, 128, 32, 32, 32, 16, 16]
+    batch_sizes = [128, 128, 128, 128, 64, 64, 32, 16, 16]
     latent_size = 1024
 
 
@@ -40,6 +40,6 @@ if __name__ == '__main__':
         log_dir="./result/celeba1024/log/", 
         save_dir="./result/celeba1024/model/",
         num_workers=0,
-        start_depth=4
+        start_depth=5
     )
     # ====================================================================== 
