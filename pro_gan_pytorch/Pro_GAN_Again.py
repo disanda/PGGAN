@@ -41,9 +41,11 @@ def update_average(model_tgt, model_src, beta):
     toggle_grad(model_src, True)
 
 device= 'cuda'
-netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=1024))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
+#netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=1024))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
+netG = net.Generator(depth=9,latent_size=1024)
 netG.load_state_dict(torch.load('./result/pre-model/GAN_GEN_SHADOW_3.pth',map_location=device)) #shadow的效果要好一些 
-netD = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=1024))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
+#netD = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=1024))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
+netD = net.Discriminator(height=9, feature_size=1024)
 netD.load_state_dict(torch.load('./result/pre-model/GAN_DIS_3.pth',map_location=device))
 
 # ProGAN Module (Unconditional)
