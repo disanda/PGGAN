@@ -15,7 +15,7 @@ from CustomLayers import _equalized_conv2d, GenGeneralConvBlock, GenInitialBlock
 from torchvision.utils import save_image
 import Networks as net
 
-cudnn.benchmark = True
+torch.backends.cudnn.benchmark = True
 
 # function to calculate the Exponential moving averages for the Generator weights, This function updates the exponential average weights based on the current training
 def update_average(model_tgt, model_src, beta):
