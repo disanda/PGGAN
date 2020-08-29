@@ -40,19 +40,36 @@ def update_average(model_tgt, model_src, beta):
     toggle_grad(model_tgt, True)
     toggle_grad(model_src, True)
 
+#----------------------------load pre-model-------------
 device= 'cuda'
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=1024))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
-#netG.load_state_dict(torch.load('./result/pre-model/GAN_GEN_SHADOW_3.pth',map_location=device)) #shadow的效果要好一些 
-netG.cuda()
-netG.load_state_dict({k.replace('module.',''):v for k,v in torch.load('./result/pre-model/GAN_GEN_SHADOW_3.pth').items()})
+#netG.load_state_dict(torch.load('./result/pre-model/GAN_DIS_3.pth',map_location=device))
+#netG.cuda()
+#netG.load_state_dict({k.replace('module.',''):v for k,v in torch.load('./result/pre-model/GAN_GEN_SHADOW_3.pth').items()})
+
+state_dict = torch.load('./result/pre-model/GAN_GEN_SHADOW_3.pth') # create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict1 = OrderedDict()
+for k, v in state_dict.items():
+    name = k[7:] # remove `module.`
+    new_state_dict1[name] = v
+netG.load_state_dict(torch.load(new_state_dict1,map_location=device)) #shadow的效果要好一些 
 
 
 netD = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=1024))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 #netD.load_state_dict(torch.load('./result/pre-model/GAN_DIS_3.pth',map_location=device))
-netD.cuda()
-netD.load_state_dict({k.replace('module.',''):v for k,v in torch.load('./result/pre-model/GAN_DIS_3.pth').items()})
+#netD.cuda()
+#netD.load_state_dict({k.replace('module.',''):v for k,v in torch.load('./result/pre-model/GAN_DIS_3.pth').items()})
 
-# ProGAN Module (Unconditional)
+state_dict = torch.load('./result/pre-model/GAN_DIS_3.pth') # create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict2 = OrderedDict()
+for k, v in state_dict.items():
+    name = k[7:] # remove `module.`
+    new_state_dict2[name] = v
+netD.load_state_dict(torch.load(new_state_dict2,map_location=device)) #shadow的效果要好一些 
+
+#------------------------- ProGAN Module (Unconditional)
 class ProGAN:
     """ Wrapper around the Generator and the Discriminator """
     def __init__(self, depth=7, latent_size=512, learning_rate=0.001, beta_1=0,
