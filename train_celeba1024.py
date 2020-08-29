@@ -2,8 +2,7 @@ import torch as th
 import torchvision as tv
 import sys
 sys.path.append('pro_gan_pytorch')
-#import PRO_GAN_Again as pg
-import Pro_GAN_Again as pg
+import Pro_GAN_Again as pg #导入之前训练的图片
 import torchvision
 from pro_gan_pytorch.DataTools import DatasetFromFolder
 
@@ -15,9 +14,9 @@ if __name__ == '__main__':
     # some parameters:
     depth = 9 # 4-->8-->16-->32-->64-->128-->256-->512-->1024 ，0开始,8结束,所以depth是9
     # hyper-parameters per depth (resolution)
-    num_epochs = [10, 15, 20, 20,20,20,20,20]
+    num_epochs = [10, 10, 10, 10, 10, 10,10 ,10， 10]
     fade_ins = [100, 90, 80, 70, 60, 50, 40, 30, 20]
-    batch_sizes = [128, 128, 128, 128, 64, 64, 64, 32, 32]
+    batch_sizes = [128, 128, 128, 128, 32, 32, 32, 16, 16]
     latent_size = 1024
 
 
@@ -41,6 +40,6 @@ if __name__ == '__main__':
         log_dir="./result/celeba1024/log/", 
         save_dir="./result/celeba1024/model/",
         num_workers=0,
-        start_depth=2
+        start_depth=4
     )
     # ====================================================================== 

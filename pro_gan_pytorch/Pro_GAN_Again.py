@@ -42,9 +42,9 @@ def update_average(model_tgt, model_src, beta):
 
 device= 'cuda'
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=1024))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
-netG.load_state_dict(torch.load('./result/pre-model/GAN_GEN_SHADOW_2.pth',map_location=device)) #shadow的效果要好一些 
+netG.load_state_dict(torch.load('./result/pre-model/GAN_GEN_SHADOW_3.pth',map_location=device)) #shadow的效果要好一些 
 netD = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=1024))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
-netD.load_state_dict(torch.load('./result/pre-model/GAN_DIS_2.pth',map_location=device))
+netD.load_state_dict(torch.load('./result/pre-model/GAN_DIS_3.pth',map_location=device))
 
 # ProGAN Module (Unconditional)
 class ProGAN:
@@ -303,7 +303,7 @@ class ProGAN:
                 stop = timeit.default_timer()
                 print("Time taken for epoch: %.3f secs" % (stop - start))
 
-                if epoch % checkpoint_factor == 10 or epoch == epochs[current_depth]:
+                if epoch % checkpoint_factor == 5 or epoch == epochs[current_depth]:
                     os.makedirs(save_dir, exist_ok=True)
                     gen_save_file = os.path.join(save_dir, "GAN_GEN_" + str(current_depth) + ".pth")
                     dis_save_file = os.path.join(save_dir, "GAN_DIS_" + str(current_depth) + ".pth")

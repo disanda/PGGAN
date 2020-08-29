@@ -30,7 +30,7 @@ class DatasetFromFolder(data.Dataset):
     def __init__(self, path, transform=None):
         super().__init__()
         self.path = path#指定自己的路径
-        self.image_filenames = [x for x in os.listdir(self.path)]
+        self.image_filenames = [x for x in os.listdir(self.path) if x.endswith('jpg') or x.endswith('png')]
         self.transform  = transform
     def __getitem__(self, index):
         a = Image.open(os.path.join(self.path, self.image_filenames[index])).convert('RGB')
