@@ -82,6 +82,28 @@ class encoder_v1(torch.nn.Module):
         out = self.new_final(y)
         return out
 
+#in: [-1,3,1024,1024], out: [-1,512] 
+class encoder_v2(torch.nn.Module):
+    def __init__(self, height=7, feature_size=512, use_eql=True):
+        super().__init__()
+        self.main = nn.Sequential(
+        nn.Conv2d(3,12,4,2,1,bias=False), # 1024->512
+        nn.LeakyReLU(0.2, inplace=True),
+        nn.Conv2d(12,12,4,2,1,bias=False),# 512->256
+        nn.BatchNorm2d(12),
+        nn.LeakyReLU(0.2, inplace=True),
+        nn.Conv2d(12,3,4,2,1,bias=False),# 256->128
+        nn.BatchNorm2d(3),
+        nn.LeakyReLU(0.2, inplace=True),
+        nn.Conv2d(3,1,4,2,1,bias=False),# 128->64*64=4096
+    )
+        self.fc = nn.Linear(4096,512)
+    def forward(self, x):
+        y1 = self.main(x)
+        y2 = y1.view(-1,4096)
+        y3 = self.fc(y2)
+        return y3
+
 #----------original--------------
 class Discriminator(torch.nn.Module):
     """ Discriminator of the GAN """
