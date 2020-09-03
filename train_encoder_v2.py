@@ -139,7 +139,8 @@ for epoch in range(10):
 		z = torch.randn(10, 512).to(device)
 		with torch.no_grad():
 			x = netG(z,depth=8,alpha=1)
-		z_ = netD2(x.detach(),height=8,alpha=1)
+		#z_ = netD2(x.detach(),height=8,alpha=1)
+		z_ = netD2(x.detach()) #new_small_Net
 		z_ = z_.squeeze(2).squeeze(2)
 		x_ = netG(z_,depth=8,alpha=1)
 		optimizer.zero_grad()
