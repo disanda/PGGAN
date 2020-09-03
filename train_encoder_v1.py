@@ -1,3 +1,5 @@
+# 这个版本匹配:	GAN_Encoder.py, 似乎有一点毛病
+
 import torch 
 import torchvision 
 import sys

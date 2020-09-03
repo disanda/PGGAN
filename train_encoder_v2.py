@@ -1,3 +1,5 @@
+#这个版本只需要导入网络即可(不需要导入训练网络)，先已完成两个实验，第一个实验完成gt编码的比较，第二个实验完成G(z)的编码比较
+#准备做 不同网络的比较，包括结构不同，weight不同的情况 (mnist中以上因素不同，区别不大)
 import torch
 import numpy as np
 import os
@@ -9,17 +11,17 @@ from pro_gan_pytorch.DataTools import DatasetFromFolder
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #----------------path setting---------------
-# resultPath = "./result/RC_1"
-# if not os.path.exists(resultPath):
-#     os.mkdir(resultPath)
+resultPath = "./result/RC_2_noshare"
+if not os.path.exists(resultPath):
+    os.mkdir(resultPath)
 
-# resultPath1_1 = resultPath+"/imgs"
-# if not os.path.exists(resultPath1_1):
-#     os.mkdir(resultPath1_1)
+resultPath1_1 = resultPath+"/imgs"
+if not os.path.exists(resultPath1_1):
+    os.mkdir(resultPath1_1)
 
-# resultPath1_2 = resultPath+"/models"
-# if not os.path.exists(resultPath1_2):
-#     os.mkdir(resultPath1_2)
+resultPath1_2 = resultPath+"/models"
+if not os.path.exists(resultPath1_2):
+    os.mkdir(resultPath1_2)
 
 #-----------------preModel-------------------
 # netG = torch.nn.DataParallel(pg.Generator(depth=9))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
@@ -64,21 +66,21 @@ def toggle_grad(model, requires_grad):
         p.requires_grad_(requires_grad)
 
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=512))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
-netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
-netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
-netD1.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location=device))
+#netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
+#netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
+#netD1.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location=device))
 
 netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
-toggle_grad(netD1,False)
-toggle_grad(netD2,False)
+# toggle_grad(netD1,False)
+# toggle_grad(netD2,False)
 
-paraDict = dict(netD1.named_parameters()) # pre_model weight dict
-for i,j in netD2.named_parameters():
-	if i in paraDict.keys():
-		w = paraDict[i]
-		j.copy_(w)
+# paraDict = dict(netD1.named_parameters()) # pre_model weight dict
+# for i,j in netD2.named_parameters():
+# 	if i in paraDict.keys():
+# 		w = paraDict[i]
+# 		j.copy_(w)
 
-toggle_grad(netD2,True)
+# toggle_grad(netD2,True)
 
 # x = torch.randn(1,3,1024,1024)
 # z = netD2(x,height=8,alpha=1)
@@ -127,31 +129,31 @@ toggle_grad(netD2,True)
 # 		torch.save(netD2.state_dict(), resultPath1_2+'/G_model.pth')
 
 
-#--------------training with generative image------------good result!------------
-# optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
-# loss = torch.nn.MSELoss()
-# loss_all=0
-# for epoch in range(10):
-# 	for i in range(5001):
-# 		z = torch.randn(10, 512).to(device)
-# 		with torch.no_grad():
-# 			x = netG(z,depth=8,alpha=1)
-# 		z_ = netD2(x.detach(),height=8,alpha=1)
-# 		z_ = z_.squeeze(2).squeeze(2)
-# 		x_ = netG(z_,depth=8,alpha=1)
-# 		optimizer.zero_grad()
-# 		loss_i = loss(x_,x)
-# 		loss_i.backward()
-# 		optimizer.step()
-# 		loss_all +=loss_i.item()
-# 		print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
-# 		if i % 200 == 0: 
-# 			img = (torch.cat((x[:8],x_[:8]))+1)/2
-# 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
-# 			#torchvision.utils.save_image(x_[:8], resultPath1_1+'/%d_rc.jpg'%(epoch,i), nrow=8)
-# 	#if epoch%10==0 or epoch == 29:
-# 	torch.save(netG.state_dict(), resultPath1_2+'/G_model_ep%d.pth'%epoch)
-# 	torch.save(netD2.state_dict(), resultPath1_2+'/D_model_ep%d.pth'%epoch)
+#--------------training with generative image------------share weight: good result!------------step2:no share weight:
+optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
+loss = torch.nn.MSELoss()
+loss_all=0
+for epoch in range(10):
+	for i in range(5001):
+		z = torch.randn(10, 512).to(device)
+		with torch.no_grad():
+			x = netG(z,depth=8,alpha=1)
+		z_ = netD2(x.detach(),height=8,alpha=1)
+		z_ = z_.squeeze(2).squeeze(2)
+		x_ = netG(z_,depth=8,alpha=1)
+		optimizer.zero_grad()
+		loss_i = loss(x_,x)
+		loss_i.backward()
+		optimizer.step()
+		loss_all +=loss_i.item()
+		print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
+		if i % 100 == 0: 
+			img = (torch.cat((x[:8],x_[:8]))+1)/2
+			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
+			#torchvision.utils.save_image(x_[:8], resultPath1_1+'/%d_rc.jpg'%(epoch,i), nrow=8)
+	#if epoch%10==0 or epoch == 29:
+	torch.save(netG.state_dict(), resultPath1_2+'/G_model_ep%d.pth'%epoch)
+	torch.save(netD2.state_dict(), resultPath1_2+'/D_model_ep%d.pth'%epoch)
 
 
 

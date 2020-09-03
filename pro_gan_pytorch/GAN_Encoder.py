@@ -223,7 +223,7 @@ class ProGAN:
                     alpha = fader_point if fader_point <1 else 1
                     images = batch.to(self.device)
                     gan_input = torch.randn(images.shape[0], self.latent_size).to(self.device)
-                    # optimize
+# optimize, new encoder
                     z = self.dis(images,height=epoch+1,alpha=1)
                     print(z.shape)
                     z = z.squeeze(2).squeeze(2)

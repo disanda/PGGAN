@@ -325,7 +325,7 @@ class ProGAN:
                 stop = timeit.default_timer()
                 print("Time taken for epoch: %.3f secs" % (stop - start))
 
-                if epoch % checkpoint_factor == 4 or epoch == epochs[current_depth]:
+                if epoch % checkpoint_factor == 1 or epoch == epochs[current_depth]:
                     os.makedirs(save_dir, exist_ok=True)
                     gen_save_file = os.path.join(save_dir, "GAN_GEN_" + str(current_depth) + ".pth")
                     dis_save_file = os.path.join(save_dir, "GAN_DIS_" + str(current_depth) + ".pth")

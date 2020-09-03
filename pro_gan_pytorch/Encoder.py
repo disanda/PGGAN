@@ -4,6 +4,7 @@ import torch.nn as nn
 from torch.nn import ModuleList, AvgPool2d
 from pro_gan_pytorch.CustomLayers import DisGeneralConvBlock, DisFinalBlock
 
+# in: [-1,512] ,    out: [-1,3,1024,1024]
 class encoder_v1(torch.nn.Module):
     """ Discriminator of the GAN """
     def __init__(self, height=7, feature_size=512, use_eql=True):
