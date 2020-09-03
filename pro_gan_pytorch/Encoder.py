@@ -84,7 +84,7 @@ class encoder_v1(torch.nn.Module):
 
 #in: [-1,3,1024,1024], out: [-1,512] 
 class encoder_v2(torch.nn.Module):
-    def __init__(self, height=7, feature_size=512, use_eql=True):
+    def __init__(self):
         super().__init__()
         self.main = nn.Sequential(
         nn.Conv2d(3,12,4,2,1,bias=False), # 1024->512
