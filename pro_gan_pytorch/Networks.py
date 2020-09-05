@@ -2,6 +2,8 @@ import torch
 import numpy as np
 from torch.nn import ModuleList, AvgPool2d
 from torch.nn.functional import interpolate
+import sys
+sys.path.append('pro_gan_pytorch')
 from CustomLayers import _equalized_conv2d, GenGeneralConvBlock, GenInitialBlock, DisGeneralConvBlock, DisFinalBlock
 
 # ========================================================================================
