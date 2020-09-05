@@ -11,7 +11,7 @@ from pro_gan_pytorch.DataTools import DatasetFromFolder
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #----------------path setting---------------
-resultPath = "./result/RC_3_new_samll_Net"
+resultPath = "./result/RC_2_no_sharingPara"
 if not os.path.exists(resultPath):
     os.mkdir(resultPath)
 
@@ -70,8 +70,8 @@ netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=
 #netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 #netD1.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location=device))
 
-#netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
-netD2 = torch.nn.DataParallel(Encoder.encoder_v2()) #新结构，不需要参数 
+netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
+#netD2 = torch.nn.DataParallel(Encoder.encoder_v2()) #新结构，不需要参数 
 # toggle_grad(netD1,False)
 # toggle_grad(netD2,False)
 
@@ -139,8 +139,8 @@ for epoch in range(10):
 		z = torch.randn(10, 512).to(device)
 		with torch.no_grad():
 			x = netG(z,depth=8,alpha=1)
-		#z_ = netD2(x.detach(),height=8,alpha=1)
-		#z_ = z_.squeeze(2).squeeze(2)
+		z_ = netD2(x.detach(),height=8,alpha=1)
+		z_ = z_.squeeze(2).squeeze(2)
 		z_ = netD2(x.detach()) #new_small_Net
 		x_ = netG(z_,depth=8,alpha=1)
 		optimizer.zero_grad()
