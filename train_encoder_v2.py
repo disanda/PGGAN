@@ -12,7 +12,7 @@ from torch.autograd import Variable
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #----------------path setting---------------
-resultPath = "./result/RC_GT_sharingPara"
+resultPath = "./result/RC_GT_No_sharingPara"
 if not os.path.exists(resultPath):
     os.mkdir(resultPath)
 
@@ -69,21 +69,21 @@ def toggle_grad(model, requires_grad):
 
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=512))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
-netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
-netD1.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location=device))
+# netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
+# netD1.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location=device))
 
 netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
 #netD2 = torch.nn.DataParallel(Encoder.encoder_v2()) #新结构，不需要参数 
-toggle_grad(netD1,False)
-toggle_grad(netD2,False)
+# toggle_grad(netD1,False)
+# toggle_grad(netD2,False)
 
-paraDict = dict(netD1.named_parameters()) # pre_model weight dict
-for i,j in netD2.named_parameters():
-	if i in paraDict.keys():
-		w = paraDict[i]
-		j.copy_(w)
+# paraDict = dict(netD1.named_parameters()) # pre_model weight dict
+# for i,j in netD2.named_parameters():
+# 	if i in paraDict.keys():
+# 		w = paraDict[i]
+# 		j.copy_(w)
 
-toggle_grad(netD2,True)
+# toggle_grad(netD2,True)
 
 # x = torch.randn(1,3,1024,1024)
 # z = netD2(x,height=8,alpha=1)
@@ -116,7 +116,7 @@ for epoch in range(10):
 		z = netD2(image,height=8,alpha=1)
 		z = z.squeeze(2).squeeze(2)
 		with torch.no_grad():
-			x_ = netG(z.detach(),depth=8,alpha=1)
+			x_ = netG(z,depth=8,alpha=1)
 		optimizer.zero_grad()
 		x=Variable(image,requires_grad=True)
 		loss_i = loss(x_,x)
