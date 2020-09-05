@@ -117,12 +117,11 @@ for epoch in range(10):
 		with torch.no_grad():
 			x_ = netG(z,depth=8,alpha=1)
 		optimizer.zero_grad()
-		loss_i = loss(x_,image)
+		x=Variable(image,requires_grad=True)
+		loss_i = loss(x_,x)
 		loss_i.backward()
 		optimizer.step()
-		print(loss_i.item())
 		loss_all +=loss_i.item()
-		print('loss_all'+str(loss_all))
 		if i % 100 == 0:
 			print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
 			img = (torch.cat((image[:8],x[:8]))+1)/2 
