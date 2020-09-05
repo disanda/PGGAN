@@ -115,8 +115,7 @@ for epoch in range(10):
 		image = batch.to(device)
 		z = netD2(image,height=8,alpha=1)
 		z = z.squeeze(2).squeeze(2)
-		with torch.no_grad():
-			x_ = netG(z,depth=8,alpha=1)
+		x_ = netG(z,depth=8,alpha=1)
 		optimizer.zero_grad()
 		x=Variable(image,requires_grad=True)
 		loss_i = loss(x_,x)
