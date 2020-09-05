@@ -128,7 +128,7 @@ for epoch in range(10):
 			img = (torch.cat((image[:8],x[:8]))+1)/2 
 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
 	torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
-	torch.save(netD2.state_dict(), resultPath1_2+'/G_model.pth')
+	torch.save(netD2.state_dict(), resultPath1_2+'/D_model.pth')
 
 #---------------training with true image & compare z------------- 这个完全没有生成
 # optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
@@ -154,7 +154,7 @@ for epoch in range(10):
 # 			torchvision.utils.save_image(image, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
 # 	if epoch%10==0 or epoch == 29:
 # 		torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
-# 		torch.save(netD2.state_dict(), resultPath1_2+'/G_model.pth')
+# 		torch.save(netD2.state_dict(), resultPath1_2+'/D_model.pth')
 
 
 
