@@ -138,17 +138,17 @@ for epoch in range(10):
 		image = batch.to(device)
 		z = netD2(image,height=8,alpha=1)
 		z = z.squeeze(2).squeeze(2)
-		x = netG(z,depth=8,alpha=1)
+		with torch.no_grad():
+			x = netG(z,depth=8,alpha=1)
 		z_ = netD2(x,height=8,alpha=1)
 		z_ = z_.squeeze(2).squeeze(2)
 		optimizer.zero_grad()
 		loss_i = loss(z,z_)
 		loss_i.backward()
 		optimizer.step()
-		print(loss_i.item())
 		loss_all +=loss_i.item()
-		print('loss_all'+str(loss_all))
 		if i % 100 == 0: 
+			print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
 			img = (torch.cat((image[:8],x[:8]))+1)/2
 			torchvision.utils.save_image(image, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
 	if epoch%10==0 or epoch == 29:
