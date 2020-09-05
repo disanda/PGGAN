@@ -94,7 +94,6 @@ toggle_grad(netD2,True)
 # z = torch.randn(5,512)
 # x = (netG(z,depth=8,alpha=1)+1)/2
 # torchvision.utils.save_image(x, './recons.jpg', nrow=5)
-del D1
 
 #------------------dataSet-----------
 data_path='/_yucheng/dataSet/CelebAMask-HQ/CelebAMask-HQ/CelebA-HQ-img'
