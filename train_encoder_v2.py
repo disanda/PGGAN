@@ -11,7 +11,7 @@ from pro_gan_pytorch.DataTools import DatasetFromFolder
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #----------------path setting---------------
-resultPath = "./result/RC_GT_sharingPara_compareZ"
+resultPath = "./result/RC_GT_sharingPara"
 if not os.path.exists(resultPath):
     os.mkdir(resultPath)
 
@@ -106,30 +106,6 @@ data = torch.utils.data.DataLoader(dataset=dataSet,batch_size=10,shuffle=True,nu
 
 
 #---------------training with true image-------------
-# optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
-# loss = torch.nn.MSELoss()
-# loss_all=0
-# for epoch in range(30):
-# 	for (i, batch) in enumerate(data):
-# 		image = batch.to(device)
-# 		z = netD2(image,height=8,alpha=1)
-# 		z = z.squeeze(2).squeeze(2)
-# 		x_ = netG(z,depth=8,alpha=1)
-# 		optimizer.zero_grad()
-# 		loss_i = loss(x_,image)
-# 		loss_i.backward()
-# 		optimizer.step()
-# 		print(loss_i.item())
-# 		loss_all +=loss_i.item()
-# 		print('loss_all'+str(loss_all))
-# 		if i % 100 == 0: 
-# 			torchvision.utils.save_image(image[:8], resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
-# 			torchvision.utils.save_image(x_[:8], resultPath1_1+'/%d_rc.jpg'%(epoch,i), nrow=8)
-# 	if epoch%10==0 or epoch == 29:
-# 		torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
-# 		torch.save(netD2.state_dict(), resultPath1_2+'/G_model.pth')
-
-#---------------training with true image & compare z-------------
 optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
 loss = torch.nn.MSELoss()
 loss_all=0
@@ -139,21 +115,46 @@ for epoch in range(10):
 		z = netD2(image,height=8,alpha=1)
 		z = z.squeeze(2).squeeze(2)
 		with torch.no_grad():
-			x = netG(z,depth=8,alpha=1)
-		z_ = netD2(x,height=8,alpha=1)
-		z_ = z_.squeeze(2).squeeze(2)
+			x_ = netG(z,depth=8,alpha=1)
 		optimizer.zero_grad()
-		loss_i = loss(z,z_)
+		loss_i = loss(x_,image)
 		loss_i.backward()
 		optimizer.step()
+		print(loss_i.item())
 		loss_all +=loss_i.item()
-		if i % 100 == 0: 
+		print('loss_all'+str(loss_all))
+		if i % 100 == 0:
 			print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
-			img = (torch.cat((image[:8],x[:8]))+1)/2
-			torchvision.utils.save_image(image, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
-	if epoch%10==0 or epoch == 29:
-		torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
-		torch.save(netD2.state_dict(), resultPath1_2+'/G_model.pth')
+			img = (torch.cat((image[:8],x[:8]))+1)/2 
+			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
+	torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
+	torch.save(netD2.state_dict(), resultPath1_2+'/G_model.pth')
+
+#---------------training with true image & compare z------------- 这个完全没有生成
+# optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
+# loss = torch.nn.MSELoss()
+# loss_all=0
+# for epoch in range(10):
+# 	for (i, batch) in enumerate(data):
+# 		image = batch.to(device)
+# 		z = netD2(image,height=8,alpha=1)
+# 		z = z.squeeze(2).squeeze(2)
+# 		with torch.no_grad():
+# 			x = netG(z,depth=8,alpha=1)
+# 		z_ = netD2(x,height=8,alpha=1)
+# 		z_ = z_.squeeze(2).squeeze(2)
+# 		optimizer.zero_grad()
+# 		loss_i = loss(z,z_)
+# 		loss_i.backward()
+# 		optimizer.step()
+# 		loss_all +=loss_i.item()
+# 		if i % 100 == 0: 
+# 			print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
+# 			img = (torch.cat((image[:8],x[:8]))+1)/2
+# 			torchvision.utils.save_image(image, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
+# 	if epoch%10==0 or epoch == 29:
+# 		torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
+# 		torch.save(netD2.state_dict(), resultPath1_2+'/G_model.pth')
 
 
 
