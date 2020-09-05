@@ -125,7 +125,8 @@ for epoch in range(10):
 		loss_all +=loss_i.item()
 		if i % 100 == 0:
 			print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
-			img = (torch.cat((image[:8],x[:8]))+1)/2 
+			x_ = (x_+1)/2
+			img = (torch.cat((image[:8],x_[:8]))+1)/2 
 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
 	torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
 	torch.save(netD2.state_dict(), resultPath1_2+'/D_model.pth')
