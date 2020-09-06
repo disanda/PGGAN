@@ -64,11 +64,11 @@ resultPath1_1 = resultPath+"/E"
 if not os.path.exists(resultPath1_1):
     os.mkdir(resultPath1_1)
 
-resultPath1_1_1 = resultPath1_1+"/Ep_1"
+resultPath1_1_1 = resultPath1_1+"/"+ep
 if not os.path.exists(resultPath1_1_1):
     os.mkdir(resultPath1_1_1)
 
-resultPath1_1_2 = resultPath1_1+"/True_1"
+resultPath1_1_2 = resultPath1_1+"/True"+ep
 if not os.path.exists(resultPath1_1_2):
     os.mkdir(resultPath1_1_2)
 
