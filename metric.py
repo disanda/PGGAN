@@ -8,6 +8,7 @@ import skimage
 from PIL import Image
 import matplotlib.image
 import matplotlib.pyplot as plt
+from skimage.io import imsave
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -77,10 +78,10 @@ psnr_all_1=0
 ssim_all_1=0
 #ssim_all_2=0
 for i in range(8):
-	array1 = x[i].numpy().squeeze()
+	array1 = x[i].cpu().numpy().squeeze()
 	array1 = array1.transpose(1,2,0)
 	#array1 = (array1+1)/2
-	array2 = x_[i].numpy().squeeze()
+	array2 = x_[i].cpu().numpy().squeeze()
 	array2 = array2.transpose(1,2,0)
 	#array2 = (array2+1)/2
 	psnr1 = skimage.measure.compare_psnr(array1, array2, 255)
@@ -101,9 +102,10 @@ for i in range(8):
 	# print('-------------')
 	img1 = (array1+1)/2
 	img2 = (array2+1)/2
-	matplotlib.image.imsave(resultPath1_1_1+'./rc_%d.png'%i, img1)
-	matplotlib.image.imsave(resultPath1_1_2+'./_%d.png'%i, img2)
-
+	# matplotlib.image.imsave(resultPath1_1_1+'./rc_%d.png'%i, img1) #报错,应该是浮点数类型不对
+	# matplotlib.image.imsave(resultPath1_1_2+'./_%d.png'%i, img2)
+	imsave(resultPath1_1_1+'./rc_%d.png'%i, img1)
+	imsave(resultPath1_1_2+'./_%d.png'%i, img2)
 print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
 print(psnr_all_1/8)
 print('-------------')
