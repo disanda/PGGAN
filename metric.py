@@ -53,7 +53,7 @@ with torch.no_grad():
 	x = netG(z,depth=8,alpha=1)
 	#z_ = netD(x.detach(),height=8,alpha=1)
 	#z_ = z_.squeeze(2).squeeze(2)
-	z_ = netD2(x.detach()) #new_small_Net
+	z_ = netD(x.detach()) #new_small_Net
 	#z_ = netD(x.detach()) #new_small_Net , 或者注释前两行
 	x_ = netG(z_,depth=8,alpha=1)
 
