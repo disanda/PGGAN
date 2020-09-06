@@ -64,13 +64,13 @@ resultPath1_1 = resultPath+"/E"
 if not os.path.exists(resultPath1_1):
     os.mkdir(resultPath1_1)
 
-resultPath1_1_1 = resultPath1_1+"/ep0"
-if not os.path.exists(resultPath1_1):
-    os.mkdir(resultPath1_1)
+resultPath1_1_1 = resultPath1_1+"/Ep_0"
+if not os.path.exists(resultPath1_1_1):
+    os.mkdir(resultPath1_1_1)
 
 resultPath1_1_2 = resultPath1_1+"/True"
-if not os.path.exists(resultPath1_1):
-    os.mkdir(resultPath1_1)
+if not os.path.exists(resultPath1_1_2):
+    os.mkdir(resultPath1_1_2)
 
 # #--------------------PSNR & SSIM------------------
 psnr_all_1=0
@@ -104,8 +104,8 @@ for i in range(8):
 	#img2 = (array2+1)/2
 	# matplotlib.image.imsave(resultPath1_1_1+'./rc_%d.png'%i, img1) #报错,应该是浮点数类型不对
 	# matplotlib.image.imsave(resultPath1_1_2+'./_%d.png'%i, img2)
-	imsave(resultPath1_1_1+'/rc_%d.png'%i, img1)
-	imsave(resultPath1_1_2+'/_%d.png'%i, img2)
+	imsave(resultPath1_1_1+'/rc_%d.png'%i, array1)
+	imsave(resultPath1_1_2+'/_%d.png'%i, array2)
 print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
 print(psnr_all_1/8)
 print('-------------')
