@@ -47,7 +47,7 @@ netD.load_state_dict(torch.load('/_yucheng/bigModel/pro-gan/PGGAN/result/RC_1/mo
 
 # #netD = Encoder.encoder_v2() #新结构，不需要参数 
 
-z = torch.randn(8, 512).to(device)
+z = torch.randn(100, 512).to(device)
 with torch.no_grad():
 	x = netG(z,depth=8,alpha=1)
 	z_ = netD(x.detach(),height=8,alpha=1)
@@ -77,7 +77,7 @@ psnr_all_1=0
 #psnr_all_2=0
 ssim_all_1=0
 #ssim_all_2=0
-for i in range(8):
+for i in range(100):
 	array1 = x[i].cpu().numpy().squeeze()
 	array1 = array1.transpose(1,2,0)
 	#array1 = (array1+1)/2
@@ -103,16 +103,16 @@ for i in range(8):
 	#img1 = (array1+1)/2
 	#img2 = (array2+1)/2
 	# matplotlib.image.imsave(resultPath1_1_1+'./rc_%d.png'%i, img1) #报错,应该是浮点数类型不对
-	# matplotlib.image.imsave(resultPath1_1_2+'./_%d.png'%i, img2)
+	# matplotlib.image.imsave(resultPath1_1_2+'./Gz_%d.png'%i, img2)
 	imsave(resultPath1_1_1+'/rc_%d.png'%i, array1)
-	imsave(resultPath1_1_2+'/_%d.png'%i, array2)
+	imsave(resultPath1_1_2+'/Gz_%d.png'%i, array2)
 print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
-print(psnr_all_1/8)
+print(psnr_all_1/100)
 print('-------------')
 # print(psnr_all_2/10)
 # print('-------------')
 print('-------------') #SSIM取值范围[0,1]，值越大，表示图像失真越小.
-print(ssim_all_1/8)
+print(ssim_all_1/100)
 print('-------------')
 # print(ssim_all_2/10)
 # print('-------------')
@@ -177,9 +177,9 @@ print('dist_vgg:'+str(d2.mean()))
 #torchvision.utils.save_image(y, save_dir + '/%d_Epoch-c_c.png' % i)
 y = (torch.cat((x,x_))+1)/2
 dir_img = '/E_ep0'
-torchvision.utils.save_image(y, resultPath1_1+dir_img+'.png',nrow=8)
-torchvision.utils.save_image((x+1)/2, resultPath1_1+dir_img+'_Gz.png',nrow=8)
-torchvision.utils.save_image((x_+1)/2, resultPath1_1+dir_img+'_rc.png',nrow=8)
+torchvision.utils.save_image(y[:8], resultPath1_1+dir_img+'.png',nrow=8)
+torchvision.utils.save_image((x[:8]+1)/2, resultPath1_1+dir_img+'_Gz.png',nrow=8)
+torchvision.utils.save_image((x[:8]_+1)/2, resultPath1_1+dir_img+'_rc.png',nrow=8)
 
 
 
