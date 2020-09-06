@@ -142,7 +142,7 @@ for epoch in range(10):
 		z = z.squeeze(2).squeeze(2)
 		x_ = netG(z,depth=8,alpha=1) #A.这个去梯度，会没有效果, (训练结果基本不会发生改变)! B.用detach,G的梯度不受影响，也影响不到D,人脸不改变，但属性会跟着变 C.什么都不用，G会受当次影响发生改变,生成效果变化比较大
 		optimizer.zero_grad()
-		loss_i = loss(image.item(),x_.item())
+		loss_i = loss(image,x_)
 		loss_i.backward()
 		optimizer.step()
 		loss_all +=loss_i.item()
