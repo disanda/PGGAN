@@ -56,44 +56,44 @@ with torch.no_grad():
 
 
 # #--------------------PSNR & SSIM------------------
-psnr_all_1=0
-#psnr_all_2=0
-ssim_all_1=0
-#ssim_all_2=0
-for i in range(8):
-	array1 = x[i].cpu().numpy().squeeze()
-	array1 = array1.transpose(1,2,0)
-	#array1 = (array1+1)/2
-	array2 = x_[i].cpu().numpy().squeeze()
-	array2 = array2.transpose(1,2,0)
-	#array2 = (array2+1)/2
-	psnr1 = skimage.measure.compare_psnr(array1, array2, 255)
-	psnr_all_1 +=psnr1
-	#psnr2 = tf.image.psnr(array1, array2, max_val=255)
-	# print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
-	# print(psnr1)
-	# print('-------------')
-	# print(psnr2)
-	# print('-------------')
-	ssim1 = skimage.measure.compare_ssim(array1, array2, data_range=255,multichannel=True)
-	ssim_all_1 +=ssim1
-	#ssim2 = tf.image.ssim(tf.convert_to_tensor(array1),tf.convert_to_tensor(array2),max_val=255)
-	# print('-------------') #SSIM取值范围[0,1]，值越大，表示图像失真越小.
-	# print(ssim1)
-	# print('-------------')
-	# print(ssim2)
-	# print('-------------')
+# psnr_all_1=0
+# #psnr_all_2=0
+# ssim_all_1=0
+# #ssim_all_2=0
+# for i in range(8):
+# 	array1 = x[i].cpu().numpy().squeeze()
+# 	array1 = array1.transpose(1,2,0)
+# 	#array1 = (array1+1)/2
+# 	array2 = x_[i].cpu().numpy().squeeze()
+# 	array2 = array2.transpose(1,2,0)
+# 	#array2 = (array2+1)/2
+# 	psnr1 = skimage.measure.compare_psnr(array1, array2, 255)
+# 	psnr_all_1 +=psnr1
+# 	#psnr2 = tf.image.psnr(array1, array2, max_val=255)
+# 	# print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
+# 	# print(psnr1)
+# 	# print('-------------')
+# 	# print(psnr2)
+# 	# print('-------------')
+# 	ssim1 = skimage.measure.compare_ssim(array1, array2, data_range=255,multichannel=True)
+# 	ssim_all_1 +=ssim1
+# 	#ssim2 = tf.image.ssim(tf.convert_to_tensor(array1),tf.convert_to_tensor(array2),max_val=255)
+# 	# print('-------------') #SSIM取值范围[0,1]，值越大，表示图像失真越小.
+# 	# print(ssim1)
+# 	# print('-------------')
+# 	# print(ssim2)
+# 	# print('-------------')
 
-print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
-print(psnr_all_1/8)
-print('-------------')
-# print(psnr_all_2/10)
+# print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
+# print(psnr_all_1/8)
 # print('-------------')
-print('-------------') #SSIM取值范围[0,1]，值越大，表示图像失真越小.
-print(ssim_all_1/8)
-print('-------------')
-# print(ssim_all_2/10)
+# # print(psnr_all_2/10)
+# # print('-------------')
+# print('-------------') #SSIM取值范围[0,1]，值越大，表示图像失真越小.
+# print(ssim_all_1/8)
 # print('-------------')
+# # print(ssim_all_2/10)
+# # print('-------------')
 
 # #----------------show image---------
 # plt.figure()
