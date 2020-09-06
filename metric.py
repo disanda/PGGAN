@@ -100,12 +100,12 @@ for i in range(8):
 	# print('-------------')
 	# print(ssim2)
 	# print('-------------')
-	img1 = (array1+1)/2
-	img2 = (array2+1)/2
+	#img1 = (array1+1)/2
+	#img2 = (array2+1)/2
 	# matplotlib.image.imsave(resultPath1_1_1+'./rc_%d.png'%i, img1) #报错,应该是浮点数类型不对
 	# matplotlib.image.imsave(resultPath1_1_2+'./_%d.png'%i, img2)
-	imsave(resultPath1_1_1+'./rc_%d.png'%i, img1)
-	imsave(resultPath1_1_2+'./_%d.png'%i, img2)
+	imsave(resultPath1_1_1+'/rc_%d.png'%i, img1)
+	imsave(resultPath1_1_2+'/_%d.png'%i, img2)
 print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
 print(psnr_all_1/8)
 print('-------------')
