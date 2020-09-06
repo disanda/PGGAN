@@ -99,8 +99,8 @@ for i in range(8):
 	# print('-------------')
 	# print(ssim2)
 	# print('-------------')
-	matplotlib.image.imsave(resultPath1_1_1+'./rc_%d.png'%i, (array1+1)/2)
-	matplotlib.image.imsave(resultPath1_1_2+'./_%d.png'%i, (array2+1)/2)
+	matplotlib.image.imsave(resultPath1_1_1+'./rc_%d.png'%i, array1)
+	matplotlib.image.imsave(resultPath1_1_2+'./_%d.png'%i, array2)
 
 print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
 print(psnr_all_1/8)
