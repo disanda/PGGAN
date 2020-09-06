@@ -138,8 +138,8 @@ print('-------------')
 import lpips
 loss_fn_alex = lpips.LPIPS(net='alex') # best forward scores
 loss_fn_vgg = lpips.LPIPS(net='vgg')
-#loss_fn_alex.cuda()
-#loss_fn_vgg.cuda()
+loss_fn_alex.cuda()
+loss_fn_vgg.cuda()
 img1= x.cuda(0)
 img2 = x_.cuda(0)
 d1 = loss_fn_alex(img1, img2)
