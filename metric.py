@@ -163,6 +163,6 @@ if not os.path.exists(resultPath1_1):
 y = (torch.cat((x,x_))+1)/2
 dir_img = '/E_ep0'
 torchvision.utils.save_image(y, resultPath1_1+dir_img+'.png',nrow=8)
-torchvision.utils.save_image(x/2, resultPath1_1+'_Gz.png',nrow=8)
-torchvision.utils.save_image(x_/2, resultPath1_1+'_rc.png',nrow=8)
+torchvision.utils.save_image((x+1)/2, resultPath1_1+'_Gz.png',nrow=8)
+torchvision.utils.save_image((x_+1)/2, resultPath1_1+'_rc.png',nrow=8)
 
