@@ -3,7 +3,7 @@ import numpy as np
 import os,random
 import torchvision
 from pro_gan_pytorch import  Encoder , Networks as net
-import tensorflow as tf
+#import tensorflow as tf
 import skimage
 from PIL import Image
 import matplotlib.image
