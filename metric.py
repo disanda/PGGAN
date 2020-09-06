@@ -136,8 +136,8 @@ print('-------------')
 # print('dist:'+str(dist))
 
 import lpips
-loss_fn_alex = lpips.LPIPS(net='alex',use_gpu=True) # best forward scores
-loss_fn_vgg = lpips.LPIPS(net='vgg',use_gpu=True)
+loss_fn_alex = lpips.LPIPS(net='alex') # best forward scores
+loss_fn_vgg = lpips.LPIPS(net='vgg')
 loss_fn_alex.cuda()
 loss_fn_vgg.cuda()
 img1= x.cuda(0)
