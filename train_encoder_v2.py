@@ -69,21 +69,21 @@ def toggle_grad(model, requires_grad):
 
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=512))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
-# netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
-# netD1.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location=device))
+netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
+netD1.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location=device))
 
 netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
 #netD2 = torch.nn.DataParallel(Encoder.encoder_v2()) #新结构，不需要参数 
-# toggle_grad(netD1,False)
-# toggle_grad(netD2,False)
+toggle_grad(netD1,False)
+toggle_grad(netD2,False)
 
-# paraDict = dict(netD1.named_parameters()) # pre_model weight dict
-# for i,j in netD2.named_parameters():
-# 	if i in paraDict.keys():
-# 		w = paraDict[i]
-# 		j.copy_(w)
+paraDict = dict(netD1.named_parameters()) # pre_model weight dict
+for i,j in netD2.named_parameters():
+	if i in paraDict.keys():
+		w = paraDict[i]
+		j.copy_(w)
 
-# toggle_grad(netD2,True)
+toggle_grad(netD2,True)
 
 # x = torch.randn(1,3,1024,1024)
 # z = netD2(x,height=8,alpha=1)
@@ -142,7 +142,7 @@ for epoch in range(10):
 		z = z.squeeze(2).squeeze(2)
 		x_ = netG(z,depth=8,alpha=1) #A.这个去梯度，会没有效果, (训练结果基本不会发生改变)! B.用detach,G的梯度不受影响，也影响不到D,人脸不改变，但属性会跟着变 C.什么都不用，G会受当次影响发生改变,生成效果变化比较大
 		optimizer.zero_grad()
-		loss_i = loss(image,x_)
+		loss_i = loss(x_,image)
 		loss_i.backward()
 		optimizer.step()
 		loss_all +=loss_i.item()
