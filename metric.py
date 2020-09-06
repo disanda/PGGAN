@@ -23,8 +23,8 @@ set_seed(6)
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=512))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
 netD = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
-netD.load_state_dict(torch.load('/_yucheng/bigModel/pro-gan/PGGAN/result/RC_1/models/D_model_ep0.pth',map_location=device))
-#netD.load_state_dict(torch.load('../E-model/E/D_model_ep0.pth',map_location=device))
+#netD.load_state_dict(torch.load('/_yucheng/bigModel/pro-gan/PGGAN/result/RC_1/models/D_model_ep0.pth',map_location=device))
+netD.load_state_dict(torch.load('../E-model/E/D_model_ep0.pth',map_location=device))
 # netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
 # netD2.load_state_dict(torch.load('../E-model/E/D_model_ep1.pth',map_location=device))
 # netD3 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
@@ -134,20 +134,35 @@ print('-------------')
 # dist = model.forward(dummy_im0,dummy_im1)
 
 # print('dist:'+str(dist))
-
+#-----------------------LPIPS -----pip------------------
 import lpips
 loss_fn_alex = lpips.LPIPS(net='alex') # best forward scores
 loss_fn_vgg = lpips.LPIPS(net='vgg')
-loss_fn_alex.cuda()
-loss_fn_vgg.cuda()
+#loss_fn_alex.cuda()
+#loss_fn_vgg.cuda()
 img1= x.cuda(0)
 img2 = x_.cuda(0)
 d1 = loss_fn_alex(img1, img2)
 d2 = loss_fn_vgg(img1, img2)
-print('dist_alex:'+str(d1))
-print('dist_vgg:'+str(d2))
+print('dist_alex:'+str(d1.mean()))
+print('dist_vgg:'+str(d2.mean()))
+
 # #----------------save image---------
-array1 = (array1+1)/2
-array2 = (array2+1)/2
-matplotlib.image.imsave('./z_8.png', array1)
-matplotlib.image.imsave('./A1_8.png', array2)
+resultPath = "./metrics/"
+if not os.path.exists(resultPath):
+    os.mkdir(resultPath)
+
+resultPath1_1 = resultPath+"/E"
+if not os.path.exists(resultPath1_1):
+    os.mkdir(resultPath1_1)
+# array1 = (array1+1)/2
+# array2 = (array2+1)/2
+# matplotlib.image.imsave('./z_8.png', array1)
+# matplotlib.image.imsave('./A1_8.png', array2)
+#torchvision.utils.save_image(y, save_dir + '/%d_Epoch-c_c.png' % i)
+y = (torch.cat((x,x_))+1)/2
+dir_img = '/E_ep0'
+torchvision.utils.save_image(y, resultPath1_1+dir_img+'.png',nrow=8)
+torchvision.utils.save_image(x/2, resultPath1_1+'_Gz.png',nrow=8)
+torchvision.utils.save_image(x_/2, resultPath1_1+'_rc.png',nrow=8)
+
