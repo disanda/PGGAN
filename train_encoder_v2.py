@@ -136,8 +136,7 @@ loss_all=0
 for epoch in range(10):
 	for (i, batch) in enumerate(data):
 		z_ = torch.randn(10, 512).to(device)
-		with torch.no_grad():
-			x = netG(z_,depth=8,alpha=1)
+		x = netG(z_,depth=8,alpha=1)
 		image = batch.to(device)
 		z = netD2(image,height=8,alpha=1)
 		z = z.squeeze(2).squeeze(2)
