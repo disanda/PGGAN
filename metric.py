@@ -55,6 +55,22 @@ with torch.no_grad():
 	x_ = netG(z_,depth=8,alpha=1)
 
 
+resultPath = "./metrics/"
+if not os.path.exists(resultPath):
+    os.mkdir(resultPath)
+
+resultPath1_1 = resultPath+"/E"
+if not os.path.exists(resultPath1_1):
+    os.mkdir(resultPath1_1)
+
+resultPath1_1_1 = resultPath1_1+"/ep0"
+if not os.path.exists(resultPath1_1):
+    os.mkdir(resultPath1_1)
+
+resultPath1_1_2 = resultPath1_1+"/True"
+if not os.path.exists(resultPath1_1):
+    os.mkdir(resultPath1_1)
+
 # #--------------------PSNR & SSIM------------------
 psnr_all_1=0
 #psnr_all_2=0
@@ -83,6 +99,8 @@ for i in range(8):
 	# print('-------------')
 	# print(ssim2)
 	# print('-------------')
+	matplotlib.image.imsave(resultPath1_1_1+'./rc_%d.png'%i, (array1+1)/2)
+	matplotlib.image.imsave(resultPath1_1_2+'./_%d.png'%i, (array2+1)/2)
 
 print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
 print(psnr_all_1/8)
@@ -148,13 +166,6 @@ print('dist_alex:'+str(d1.mean()))
 print('dist_vgg:'+str(d2.mean()))
 
 # #----------------save image---------
-resultPath = "./metrics/"
-if not os.path.exists(resultPath):
-    os.mkdir(resultPath)
-
-resultPath1_1 = resultPath+"/E"
-if not os.path.exists(resultPath1_1):
-    os.mkdir(resultPath1_1)
 # array1 = (array1+1)/2
 # array2 = (array2+1)/2
 # matplotlib.image.imsave('./z_8.png', array1)
@@ -163,6 +174,8 @@ if not os.path.exists(resultPath1_1):
 y = (torch.cat((x,x_))+1)/2
 dir_img = '/E_ep0'
 torchvision.utils.save_image(y, resultPath1_1+dir_img+'.png',nrow=8)
-torchvision.utils.save_image((x+1)/2, resultPath1_1+'_Gz.png',nrow=8)
-torchvision.utils.save_image((x_+1)/2, resultPath1_1+'_rc.png',nrow=8)
+torchvision.utils.save_image((x+1)/2, resultPath1_1+dir_img+'_Gz.png',nrow=8)
+torchvision.utils.save_image((x_+1)/2, resultPath1_1+dir_img+'_rc.png',nrow=8)
+
+
 
