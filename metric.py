@@ -112,29 +112,36 @@ print('-------------')
 #array2 = a[67:,:,:]
 #b = b[67:,:,:]
 
-#-------------------LPIPS --- -------------
+#-------------------LPIPS --- code-------------
 #import sys
 #sys.path.append('PerceptualSimilarity')
-from PerceptualSimilarity.util import util
-import PerceptualSimilarity.models as models
-from PerceptualSimilarity.models import dist_model as dm
-from IPython import embed
+# from PerceptualSimilarity.util import util
+# import PerceptualSimilarity.models as models
+# from PerceptualSimilarity.models import dist_model as dm
+# from IPython import embed
 
 
-use_gpu = False         # Whether to use GPU
-spatial = True         # Return a spatial map of perceptual distance.
+# use_gpu = False         # Whether to use GPU
+# spatial = True         # Return a spatial map of perceptual distance.
 
-# Linearly calibrated models (LPIPS)
-model = models.PerceptualLoss(model='net-lin', net='alex', use_gpu=True) #spatial
-dummy_im0 = x # image should be RGB, normalized to [-1,1]
-dummy_im1 = x_
-if(use_gpu):
-	dummy_im0 = dummy_im0.cuda()
-	dummy_im1 = dummy_im1.cuda()
-dist = model.forward(dummy_im0,dummy_im1)
+# # Linearly calibrated models (LPIPS)
+# model = models.PerceptualLoss(model='net-lin', net='alex', use_gpu=True) #spatial
+# dummy_im0 = x # image should be RGB, normalized to [-1,1]
+# dummy_im1 = x_
+# if(use_gpu):
+# 	dummy_im0 = dummy_im0.cuda()
+# 	dummy_im1 = dummy_im1.cuda()
+# dist = model.forward(dummy_im0,dummy_im1)
 
-print('dist:'+str(dist))
+# print('dist:'+str(dist))
 
+import lpips
+loss_fn_alex = lpips.LPIPS(net='alex') # best forward scores
+loss_fn_vgg = lpips.LPIPS(net='vgg')
+d1 = loss_fn_alex(x, x_)
+d2 = loss_fn_vgg(x, x_)
+print('dist_alex:'+str(d1))
+print('dist_vgg:'+str(d2))
 # #----------------save image---------
 array1 = (array1+1)/2
 array2 = (array2+1)/2
