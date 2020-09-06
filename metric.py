@@ -61,10 +61,10 @@ psnr_all_1=0
 ssim_all_1=0
 #ssim_all_2=0
 for i in range(8):
-	array1 = x[i].numpy().squeeze()
+	array1 = x[i].cpu().numpy().squeeze()
 	array1 = array1.transpose(1,2,0)
 	#array1 = (array1+1)/2
-	array2 = x_[i].numpy().squeeze()
+	array2 = x_[i].cpu().numpy().squeeze()
 	array2 = array2.transpose(1,2,0)
 	#array2 = (array2+1)/2
 	psnr1 = skimage.measure.compare_psnr(array1, array2, 255)
