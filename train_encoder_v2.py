@@ -135,15 +135,13 @@ loss = torch.nn.MSELoss()
 loss_all=0
 for epoch in range(10):
 	for (i, batch) in enumerate(data):
-		z_ = torch.randn(10, 512).to(device)
-		with torch.no_grad():
-			x = netG(z_,depth=8,alpha=1)
+		#z_ = torch.randn(10, 512).to(device)
 		image = batch.to(device)
 		z = netD2(image,height=8,alpha=1)
 		z = z.squeeze(2).squeeze(2)
-		x_ = netG(z,depth=8,alpha=1) #这个去梯度，会没有效果, (训练结果基本不会发生改变)!
+		x_ = netG(z.detach(),depth=8,alpha=1) #这个去梯度，会没有效果, (训练结果基本不会发生改变)!
 		optimizer.zero_grad()
-		loss_i = loss(x_,x)
+		loss_i = loss(image,x_)
 		loss_i.backward()
 		optimizer.step()
 		loss_all +=loss_i.item()
