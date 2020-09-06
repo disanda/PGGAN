@@ -108,12 +108,12 @@ for i in range(16):
 	imsave(resultPath1_1_2+'/Gz_%d.png'%i, array2)
 	print('doing:'+str(i))
 print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
-print(psnr_all_1/100)
+print(psnr_all_1/16)
 print('-------------')
 # print(psnr_all_2/10)
 # print('-------------')
 print('-------------') #SSIM取值范围[0,1]，值越大，表示图像失真越小.
-print(ssim_all_1/100)
+print(ssim_all_1/16)
 print('-------------')
 # print(ssim_all_2/10)
 # print('-------------')
