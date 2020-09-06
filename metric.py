@@ -23,8 +23,8 @@ set_seed(6)
 ep = 'ep0'
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=512))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
-netD = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
-netD.load_state_dict(torch.load('/_yucheng/bigModel/pro-gan/PGGAN/result/RC_2_no_sharingPara/models/D_model_'+ep+'.pth',map_location=device))
+netD = torch.nn.DataParallel(Encoder.encoder_v2(height=9, feature_size=512))
+netD.load_state_dict(torch.load('/_yucheng/bigModel/pro-gan/PGGAN/result/RC_3_new_samll_Net/models/D_model_'+ep+'.pth',map_location=device))
 #netD.load_state_dict(torch.load('../E-model/E/D_model_ep0.pth',map_location=device))
 # netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
 # netD2.load_state_dict(torch.load('../E-model/E/D_model_ep1.pth',map_location=device))
@@ -60,7 +60,7 @@ resultPath = "./metrics/"
 if not os.path.exists(resultPath):
     os.mkdir(resultPath)
 
-resultPath1_1 = resultPath+"/E_noW"
+resultPath1_1 = resultPath+"/E_small"
 if not os.path.exists(resultPath1_1):
     os.mkdir(resultPath1_1)
 
