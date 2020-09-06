@@ -99,6 +99,8 @@ for i in range(8):
 	# print('-------------')
 	# print(ssim2)
 	# print('-------------')
+	print(array1)
+	print(array2)
 	matplotlib.image.imsave(resultPath1_1_1+'./rc_%d.png'%i, array1)
 	matplotlib.image.imsave(resultPath1_1_2+'./_%d.png'%i, array2)
 
