@@ -106,6 +106,7 @@ for i in range(100):
 	# matplotlib.image.imsave(resultPath1_1_2+'./Gz_%d.png'%i, img2)
 	imsave(resultPath1_1_1+'/rc_%d.png'%i, array1)
 	imsave(resultPath1_1_2+'/Gz_%d.png'%i, array2)
+	print('doing:'+str(i))
 print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
 print(psnr_all_1/100)
 print('-------------')
@@ -179,7 +180,7 @@ y = (torch.cat((x,x_))+1)/2
 dir_img = '/E_ep0'
 torchvision.utils.save_image(y[:8], resultPath1_1+dir_img+'.png',nrow=8)
 torchvision.utils.save_image((x[:8]+1)/2, resultPath1_1+dir_img+'_Gz.png',nrow=8)
-torchvision.utils.save_image((x[:8]_+1)/2, resultPath1_1+dir_img+'_rc.png',nrow=8)
+torchvision.utils.save_image((x[:8]+1)/2, resultPath1_1+dir_img+'_rc.png',nrow=8)
 
 
 
