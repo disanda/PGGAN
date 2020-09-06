@@ -47,7 +47,7 @@ netD.load_state_dict(torch.load('/_yucheng/bigModel/pro-gan/PGGAN/result/RC_1/mo
 
 # #netD = Encoder.encoder_v2() #新结构，不需要参数 
 
-z = torch.randn(100, 512).to(device)
+z = torch.randn(16, 512).to(device)
 with torch.no_grad():
 	x = netG(z,depth=8,alpha=1)
 	z_ = netD(x.detach(),height=8,alpha=1)
@@ -77,7 +77,7 @@ psnr_all_1=0
 #psnr_all_2=0
 ssim_all_1=0
 #ssim_all_2=0
-for i in range(100):
+for i in range(16):
 	array1 = x[i].cpu().numpy().squeeze()
 	array1 = array1.transpose(1,2,0)
 	#array1 = (array1+1)/2
