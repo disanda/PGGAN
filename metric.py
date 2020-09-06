@@ -138,10 +138,12 @@ with torch.no_grad():
 import lpips
 loss_fn_alex = lpips.LPIPS(net='alex') # best forward scores
 #loss_fn_vgg = lpips.LPIPS(net='vgg')
+x = x.cuda(0)
+x_ = x_.cuda(0)
 d1 = loss_fn_alex(x, x_)
-#d2 = loss_fn_vgg(x, x_)
+d2 = loss_fn_vgg(x, x_)
 print('dist_alex:'+str(d1))
-#print('dist_vgg:'+str(d2))
+print('dist_vgg:'+str(d2))
 # #----------------save image---------
 array1 = (array1+1)/2
 array2 = (array2+1)/2
