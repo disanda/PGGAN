@@ -64,27 +64,34 @@ import matplotlib.pyplot as plt
 # plt.imshow(array2)
 # plt.show()
 
-#-------------------LPIPS----------------
+
 #a = matplotlib.image.imread('../v5_200.jpg')
-a = matplotlib.image.imread('../Fs_MNIST_Encoder/gan_samples_rc_v4/ep0_249.jpg')
-array1 = a[:67,:,:]
-array2 = a[67:,:,:]
+#a = matplotlib.image.imread('../Fs_MNIST_Encoder/gan_samples_rc_v4/ep0_249.jpg')
+a = matplotlib.image.imread('../ep9_4000.jpg')
+#array1 = a[:,3078:4105,:] #HQ:(2054, 8210, 3)
+array1 = a[:,1026:2053,:] #HQ:(2054, 8210, 3)
+matplotlib.image.imsave('../t2.png', array1)
+print(a.shape)
+#array2 = a[67:,:,:]
 #b = b[67:,:,:]
 
-psnr1 = skimage.measure.compare_psnr(array1, array2, 255)
-psnr2 = tf.image.psnr(array1, array2, max_val=255)
+# psnr1 = skimage.measure.compare_psnr(array1, array2, 255)
+# psnr2 = tf.image.psnr(array1, array2, max_val=255)
 
-print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
-print(psnr1)
-print('-------------')
-print(psnr2)
-print('-------------')
+# print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
+# print(psnr1)
+# print('-------------')
+# print(psnr2)
+# print('-------------')
 
-ssim1 = skimage.measure.compare_ssim(array1, array2, data_range=255,multichannel=True)
-ssim2 = tf.image.ssim(tf.convert_to_tensor(array1),tf.convert_to_tensor(array2),max_val=255)
+# ssim1 = skimage.measure.compare_ssim(array1, array2, data_range=255,multichannel=True)
+# ssim2 = tf.image.ssim(tf.convert_to_tensor(array1),tf.convert_to_tensor(array2),max_val=255)
 
-print('-------------') #SSIM取值范围[0,1]，值越大，表示图像失真越小.
-print(ssim1)
-print('-------------')
-print(ssim2)
-print('-------------')
+# print('-------------') #SSIM取值范围[0,1]，值越大，表示图像失真越小.
+# print(ssim1)
+# print('-------------')
+# print(ssim2)
+# print('-------------')
+
+
+#-------------------LPIPS----------------

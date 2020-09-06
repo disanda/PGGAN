@@ -12,7 +12,7 @@ from torch.autograd import Variable
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #----------------path setting---------------
-resultPath = "./result/RC_GT_No_sharing_withG"
+resultPath = "./result/RC_GT_X_2"
 if not os.path.exists(resultPath):
     os.mkdir(resultPath)
 
@@ -72,8 +72,8 @@ netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=
 # netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 # netD1.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location=device))
 
-netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
-#netD2 = torch.nn.DataParallel(Encoder.encoder_v2()) #新结构，不需要参数 
+#netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
+netD2 = torch.nn.DataParallel(Encoder.encoder_v2()) #新结构，不需要参数 
 # toggle_grad(netD1,False)
 # toggle_grad(netD2,False)
 
@@ -115,7 +115,7 @@ for epoch in range(10):
 		image = batch.to(device)
 		z = netD2(image,height=8,alpha=1)
 		z = z.squeeze(2).squeeze(2)
-		x_ = netG(z,depth=8,alpha=1) #这个去梯度，会没有效果, (训练结果基本不会发生改变)!
+		x_ = netG(z.detach(),depth=8,alpha=1) #这个去梯度，会没有效果, (训练结果基本不会发生改变)!
 		optimizer.zero_grad()
 		loss_i = loss(x_,image)
 		loss_i.backward()
@@ -123,7 +123,7 @@ for epoch in range(10):
 		loss_all +=loss_i.item()
 		if i % 100 == 0:
 			print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
-			x_ = (x_+1)/2
+			#x_ = (x_+1)/2
 			img = torch.cat((image[:8],x_[:8]))
 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
 	torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
