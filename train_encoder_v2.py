@@ -12,7 +12,7 @@ from torch.autograd import Variable
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #----------------path setting---------------
-resultPath = "./result/RC_GT_sharingPara_withG"
+resultPath = "./result/RC_GT_No_sharing_withG"
 if not os.path.exists(resultPath):
     os.mkdir(resultPath)
 
@@ -69,21 +69,21 @@ def toggle_grad(model, requires_grad):
 
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=512))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
-netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
-netD1.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location=device))
+# netD1 = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=512))# in: [-1,3,1024,1024],out:[], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
+# netD1.load_state_dict(torch.load('./pre-model/GAN_DIS_8.pth',map_location=device))
 
 netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
 #netD2 = torch.nn.DataParallel(Encoder.encoder_v2()) #新结构，不需要参数 
-toggle_grad(netD1,False)
-toggle_grad(netD2,False)
+# toggle_grad(netD1,False)
+# toggle_grad(netD2,False)
 
-paraDict = dict(netD1.named_parameters()) # pre_model weight dict
-for i,j in netD2.named_parameters():
-	if i in paraDict.keys():
-		w = paraDict[i]
-		j.copy_(w)
+# paraDict = dict(netD1.named_parameters()) # pre_model weight dict
+# for i,j in netD2.named_parameters():
+# 	if i in paraDict.keys():
+# 		w = paraDict[i]
+# 		j.copy_(w)
 
-toggle_grad(netD2,True)
+# toggle_grad(netD2,True)
 
 # x = torch.randn(1,3,1024,1024)
 # z = netD2(x,height=8,alpha=1)
@@ -129,32 +129,8 @@ for epoch in range(10):
 	torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
 	torch.save(netD2.state_dict(), resultPath1_2+'/D_model.pth')
 
-#---------------training with true image-------------
-# optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
-# loss = torch.nn.MSELoss()
-# loss_all=0
-# for epoch in range(30):
-# 	for (i, batch) in enumerate(data):
-# 		image = batch.to(device)
-# 		z = netD2(image,height=8,alpha=1)
-# 		z = z.squeeze(2).squeeze(2)
-# 		x_ = netG(z,depth=8,alpha=1)
-# 		optimizer.zero_grad()
-# 		loss_i = loss(x_,image)
-# 		loss_i.backward()
-# 		optimizer.step()
-# 		print(loss_i.item())
-# 		loss_all +=loss_i.item()
-# 		print('loss_all'+str(loss_all))
-# 		if i % 100 == 0: 
-# 			torchvision.utils.save_image(image[:8], resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
-# 			torchvision.utils.save_image(x_[:8], resultPath1_1+'/%d_rc.jpg'%(epoch,i), nrow=8)
-# 	if epoch%10==0 or epoch == 29:
-# 		torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
-# 		torch.save(netD2.state_dict(), resultPath1_2+'/G_model.pth')
 
-
-#---------------training with true image & compare z------------- 这个完全没有生成
+#---------------training with true image & compare z------------- 这个完全没有生成model collapse
 # optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
 # loss = torch.nn.MSELoss()
 # loss_all=0
