@@ -24,7 +24,7 @@ set_seed(6)
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=512))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
 netD = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
-netD.load_state_dict(torch.load('/_yucheng/bigModel/pro-gan/PGGAN/result/RC_1/models/D_model_ep0.pth',map_location=device))
+netD.load_state_dict(torch.load('/_yucheng/bigModel/pro-gan/PGGAN/result/RC_1/models/D_model_ep1.pth',map_location=device))
 #netD.load_state_dict(torch.load('../E-model/E/D_model_ep0.pth',map_location=device))
 # netD2 = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
 # netD2.load_state_dict(torch.load('../E-model/E/D_model_ep1.pth',map_location=device))
@@ -64,11 +64,11 @@ resultPath1_1 = resultPath+"/E"
 if not os.path.exists(resultPath1_1):
     os.mkdir(resultPath1_1)
 
-resultPath1_1_1 = resultPath1_1+"/Ep_0"
+resultPath1_1_1 = resultPath1_1+"/Ep_1"
 if not os.path.exists(resultPath1_1_1):
     os.mkdir(resultPath1_1_1)
 
-resultPath1_1_2 = resultPath1_1+"/True"
+resultPath1_1_2 = resultPath1_1+"/True_1"
 if not os.path.exists(resultPath1_1_2):
     os.mkdir(resultPath1_1_2)
 
@@ -177,7 +177,7 @@ print('dist_vgg:'+str(d2.mean()))
 # matplotlib.image.imsave('./A1_8.png', array2)
 #torchvision.utils.save_image(y, save_dir + '/%d_Epoch-c_c.png' % i)
 y = (torch.cat((x,x_))+1)/2
-dir_img = '/E_ep0'
+dir_img = '/E_ep1'
 torchvision.utils.save_image(y[:8], resultPath1_1+dir_img+'.png',nrow=8)
 torchvision.utils.save_image((x[:8]+1)/2, resultPath1_1+dir_img+'_Gz.png',nrow=8)
 torchvision.utils.save_image((x[:8]+1)/2, resultPath1_1+dir_img+'_rc.png',nrow=8)
