@@ -115,9 +115,9 @@ print('-------------')
 #-------------------LPIPS --- -------------
 import sys
 sys.path.append('PerceptualSimilarity')
-from util import util
-import models as models
-from models import dist_model as dm
+from PerceptualSimilarity.util import util
+import PerceptualSimilarity.models as models
+from PerceptualSimilarity.models import dist_model as dm
 from IPython import embed
 
 
