@@ -104,8 +104,8 @@ for i in range(16):
 	#img2 = (array2+1)/2
 	# matplotlib.image.imsave(resultPath1_1_1+'./rc_%d.png'%i, img1) #报错,应该是浮点数类型不对
 	# matplotlib.image.imsave(resultPath1_1_2+'./Gz_%d.png'%i, img2)
-	imsave(resultPath1_1_1+'/rc_%d.png'%i, array1)
-	imsave(resultPath1_1_2+'/Gz_%d.png'%i, array2)
+	imsave(resultPath1_1_2+'/Gz_%d.png'%i, array1)
+	imsave(resultPath1_1_1+'/rc_%d.png'%i, array2)
 	print('doing:'+str(i))
 print('-------------') #PSNR的单位是dB，数值越大表示失真越小。20-40dB
 print(psnr_all_1/16)
@@ -176,11 +176,11 @@ print('dist_vgg:'+str(d2.mean()))
 # matplotlib.image.imsave('./z_8.png', array1)
 # matplotlib.image.imsave('./A1_8.png', array2)
 #torchvision.utils.save_image(y, save_dir + '/%d_Epoch-c_c.png' % i)
-y = (torch.cat((x,x_))+1)/2
+y = (torch.cat((x[:8],x_[:8]))+1)/2
 dir_img = '/E_ep1'
-torchvision.utils.save_image(y[:8], resultPath1_1+dir_img+'.png',nrow=8)
+torchvision.utils.save_image(y, resultPath1_1+dir_img+'.png',nrow=8)
 torchvision.utils.save_image((x[:8]+1)/2, resultPath1_1+dir_img+'_Gz.png',nrow=8)
-torchvision.utils.save_image((x[:8]+1)/2, resultPath1_1+dir_img+'_rc.png',nrow=8)
+torchvision.utils.save_image((x_[:8]+1)/2, resultPath1_1+dir_img+'_rc.png',nrow=8)
 
 
 
