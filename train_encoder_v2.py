@@ -107,23 +107,48 @@ data = torch.utils.data.DataLoader(dataset=dataSet,batch_size=10,shuffle=True,nu
 
 
 #---------------training with true image-------------
+# optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
+# loss = torch.nn.MSELoss()
+# loss_all=0
+# for epoch in range(10):
+# 	for (i, batch) in enumerate(data):
+# 		image = batch.to(device)
+# 		z = netD2(image,height=8,alpha=1)
+# 		z = z.squeeze(2).squeeze(2)
+# 		x_ = netG(z.detach(),depth=8,alpha=1) #这个去梯度，会没有效果, (训练结果基本不会发生改变)!
+# 		optimizer.zero_grad()
+# 		loss_i = loss(x_,image)
+# 		loss_i.backward()
+# 		optimizer.step()
+# 		loss_all +=loss_i.item()
+# 		if i % 100 == 0:
+# 			print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
+# 			x_ = (x_+1)/2
+# 			img = torch.cat((image[:8],x_[:8]))
+# 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
+# 	torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
+# 	torch.save(netD2.state_dict(), resultPath1_2+'/D_model.pth')
+
+#---------------training with true image & noise-------------
 optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
 loss = torch.nn.MSELoss()
 loss_all=0
 for epoch in range(10):
 	for (i, batch) in enumerate(data):
+		z_ = torch.randn(10, 512).to(device)
+		x = netG(z_.detach(),depth=8,alpha=1)
 		image = batch.to(device)
 		z = netD2(image,height=8,alpha=1)
 		z = z.squeeze(2).squeeze(2)
 		x_ = netG(z.detach(),depth=8,alpha=1) #这个去梯度，会没有效果, (训练结果基本不会发生改变)!
 		optimizer.zero_grad()
-		loss_i = loss(x_,image)
+		loss_i = loss(x_,x)
 		loss_i.backward()
 		optimizer.step()
 		loss_all +=loss_i.item()
 		if i % 100 == 0:
 			print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
-			#x_ = (x_+1)/2
+			x_ = (x_+1)/2
 			img = torch.cat((image[:8],x_[:8]))
 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
 	torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
