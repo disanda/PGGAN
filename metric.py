@@ -20,7 +20,7 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True
 
 set_seed(6)
-ep = 'ep1'
+ep = 'ep2'
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=512))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
 netD = torch.nn.DataParallel(Encoder.encoder_v1(height=9, feature_size=512))
