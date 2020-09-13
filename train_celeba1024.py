@@ -15,7 +15,7 @@ if __name__ == '__main__':
     depth = 9 # 4-->8-->16-->32-->64-->128-->256-->512-->1024 ，0开始,8结束,所以depth是9
     # hyper-parameters per depth (resolution)
     num_epochs = [10, 10, 10, 10, 8, 8,8 ,8, 8]
-    fade_ins = [100, 90, 80, 70, 60, 50, 40, 30, 100]
+    fade_ins = [100, 90, 80, 70, 60, 50, 40, 30, 15]
     batch_sizes = [128, 128, 128, 64, 32, 16, 8, 6, 3]
     latent_size = 1024
 
