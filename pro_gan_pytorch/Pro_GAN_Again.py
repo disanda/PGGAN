@@ -45,7 +45,7 @@ def update_average(model_tgt, model_src, beta):
 #----------------------------load pre-model-------------
 device= 'cuda'
 netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=1024))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
-#netG.load_state_dict(torch.load('./result/celeba1024/model/GAN_GEN_SHADOW_7.pth',map_location=device))
+netG.load_state_dict(torch.load('./result/celeba1024/model/GAN_GEN_SHADOW_7.pth',map_location=device))
 #netG.load_state_dict({k.replace('module.',''):v for k,v in torch.load('./result/pre-model/GAN_GEN_SHADOW_3.pth').items()})
 
 # #删除多余的<<键名>>
@@ -228,7 +228,8 @@ class ProGAN:
         if scale_factor > 1:
             samples = interpolate(samples, scale_factor=scale_factor)
         # save the images:
-        save_image(samples, img_file, nrow=int(np.sqrt(len(samples))),normalize=True, scale_each=True)
+        #save_image(samples, img_file, nrow=int(np.sqrt(len(samples))),normalize=True, scale_each=True)
+        save_image(samples, img_file, nrow=8,normalize=True, scale_each=True)
     def train(self, epochs, batch_sizes,
               fade_in_percentage, num_samples=64,
               start_depth=0, num_workers=4, feedback_factor=100,
@@ -316,8 +317,8 @@ class ProGAN:
                         gen_img_file = os.path.join(sample_dir, "gen_" + str(current_depth) +"_" + str(epoch) + "_" +str(i) + ".png")
                         # this is done to allow for more GPU space
                         with torch.no_grad():
-                            samples = self.gen_shadow(fixed_input,current_depth,alpha).detach()
-                            print(samples.shape)
+                            #samples = self.gen_shadow(fixed_input,current_depth,alpha).detach()
+                            #print(samples.shape)
                             self.create_grid(samples=self.gen(fixed_input,current_depth,alpha).detach() if not self.use_ema else self.gen_shadow(fixed_input,current_depth,alpha).detach(),
                                 scale_factor=int(np.power(2, self.depth - current_depth - 1)),img_file=gen_img_file)
                     # increment the alpha ticker and the step
