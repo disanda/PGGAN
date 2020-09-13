@@ -36,9 +36,9 @@ if __name__ == '__main__':
         epochs=num_epochs,
         fade_in_percentage=fade_ins,
         batch_sizes=batch_sizes,
-        sample_dir="./result/celeba1024_testD/sample/",
-        log_dir="./result/celeba1024_testD/log/", 
-        save_dir="./result/celeba1024_textD/model/",
+        sample_dir="./result/celeba1024_test_no_preD/sample/",
+        log_dir="./result/celeba1024_test_no_preD/log/", 
+        save_dir="./result/celeba1024_text_no_preD/model/",
         num_workers=0,
         start_depth=8
     )

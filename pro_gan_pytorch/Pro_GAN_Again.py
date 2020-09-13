@@ -50,7 +50,7 @@ netG = torch.nn.DataParallel(net.Generator(depth=9,latent_size=1024))# in: [-1,5
 
 #删除多余的<<键名>>
 from collections import OrderedDict
-state_dict1 = torch.load('./result/pre-model/GAN_GEN_SHADOW_70.pth',map_location=device)
+state_dict1 = torch.load('./result/pre-model/GAN_GEN_SHADOW_7.pth',map_location=device)
 new_state_dict1 = OrderedDict()
 for k, v in state_dict1.items():
     name = k[7:] # remove `module.`
@@ -61,12 +61,12 @@ netD = torch.nn.DataParallel(net.Discriminator(height=9, feature_size=1024))# in
 #netD.load_state_dict(torch.load('./result/pre-model/GAN_DIS_3.pth',map_location=device))
 #netD.load_state_dict({k.replace('module.',''):v for k,v in torch.load('./result/pre-model/GAN_DIS_3.pth').items()})
 
-state_dict2 = torch.load('./result/pre-model/GAN_DIS_70.pth',map_location=device)
-new_state_dict2 = OrderedDict()
-for k, v in state_dict2.items():
-    name = k[7:] # remove `module.`
-    new_state_dict2[name] = v
-netD.load_state_dict(new_state_dict2)
+# state_dict2 = torch.load('./result/pre-model/GAN_DIS_70.pth',map_location=device)
+# new_state_dict2 = OrderedDict()
+# for k, v in state_dict2.items():
+#     name = k[7:] # remove `module.`
+#     new_state_dict2[name] = v
+# netD.load_state_dict(new_state_dict2)
 
 #------------------------- ProGAN Module (Unconditional)
 class ProGAN:
