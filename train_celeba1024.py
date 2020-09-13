@@ -41,6 +41,6 @@ if __name__ == '__main__':
         save_dir="./result/celeba1024_text_no_preD/model/",
         num_workers=0,
         start_depth=8,
-        
+        num_samples=32
     )
     # ====================================================================== 
