@@ -316,8 +316,10 @@ class ProGAN:
                         gen_img_file = os.path.join(sample_dir, "gen_" + str(current_depth) +"_" + str(epoch) + "_" +str(i) + ".png")
                         # this is done to allow for more GPU space
                         with torch.no_grad():
-                            self.create_grid(samples=self.gen(fixed_input,current_depth,alpha).detach() if not self.use_ema
-                                else self.gen_shadow(fixed_input,current_depth,alpha).detach(),scale_factor=int(np.power(2, self.depth - current_depth - 1)),img_file=gen_img_file)
+                            samples = self.gen_shadow(fixed_input,current_depth,alpha).detach()
+                            print(samples.shape)
+                            self.create_grid(samples=self.gen(fixed_input,current_depth,alpha).detach() if not self.use_ema else self.gen_shadow(fixed_input,current_depth,alpha).detach(),
+                                scale_factor=int(np.power(2, self.depth - current_depth - 1)),img_file=gen_img_file)
                     # increment the alpha ticker and the step
                     ticker += 1
                     step += 1
