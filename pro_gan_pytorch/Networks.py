@@ -63,10 +63,9 @@ class Generator(torch.nn.Module):
         """
         assert depth < self.depth, "Requested output depth cannot be produced"
         y = self.initial_block(x)
-        if depth > 0:
+        if depth > 0:  #0是第一层
             for block in self.layers[:depth - 1]:
                 y = block(y)
-
             residual = self.rgb_converters[depth - 1](self.temporaryUpsampler(y))
             straight = self.rgb_converters[depth](self.layers[depth - 1](y))
             out = (alpha * straight) + ((1 - alpha) * residual)
