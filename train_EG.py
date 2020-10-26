@@ -74,11 +74,11 @@ for i,j in netG2.named_parameters():
 # torchvision.utils.save_image(x, './recons.jpg', nrow=5)
 
 #------------------dataSet-----------
-data_path='/_yucheng/dataSet/CelebAMask-HQ/CelebAMask-HQ/CelebA-HQ-img'
-#data_path='/Users/apple/Desktop/CelebAMask-HQ/CelebA-HQ-img'
-trans = torchvision.transforms.ToTensor()
-dataSet = DatasetFromFolder(data_path,transform=trans)
-data = torch.utils.data.DataLoader(dataset=dataSet,batch_size=10,shuffle=True,num_workers=4,pin_memory=True)
+# data_path='/_yucheng/dataSet/CelebAMask-HQ/CelebAMask-HQ/CelebA-HQ-img'
+# #data_path='/Users/apple/Desktop/CelebAMask-HQ/CelebA-HQ-img'
+# trans = torchvision.transforms.ToTensor()
+# dataSet = DatasetFromFolder(data_path,transform=trans)
+# data = torch.utils.data.DataLoader(dataset=dataSet,batch_size=10,shuffle=True,num_workers=4,pin_memory=True)
 
 # image = next(iter(data))
 # torchvision.utils.save_image(image, './1.jpg', nrow=1)
@@ -93,11 +93,11 @@ loss_all=0
 for epoch in range(10):
 	for i in range(5001):
 		z = torch.randn(10, 512).to(device)
-		x = netG(z,depth=8,alpha=1)
+		x = netG2(z,depth=8,alpha=1)
 		z_ = netD2(x.detach(),height=8,alpha=1)
 		#z_ = netD2(x.detach()) #new_small_Net
 		z_ = z_.squeeze(2).squeeze(2)
-		x_ = netG(z_,depth=8,alpha=1)
+		x_ = netG2(z_,depth=8,alpha=1)
 		optimizer.zero_grad()
 		loss_i = loss(x_,x)
 		loss_i.backward()
