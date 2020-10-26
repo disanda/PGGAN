@@ -21,7 +21,7 @@ netD.load_state_dict(torch.load('./pre-model/AG_D_model_ep9.pth',map_location=de
 
 
 
-#------------------dataSet-----------
+#------------------测试重构图像-----------
 data_path='./newImage/'
 #data_path='/Users/apple/Desktop/CelebAMask-HQ/CelebA-HQ-img'
 

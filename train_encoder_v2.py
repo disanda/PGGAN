@@ -24,7 +24,7 @@ resultPath1_2 = resultPath+"/models"
 if not os.path.exists(resultPath1_2):
     os.mkdir(resultPath1_2)
 
-#-----------------preModel-------------------
+#-----------------test preModel-------------------
 # netG = torch.nn.DataParallel(pg.Generator(depth=9))# in: [-1,512], depth:0-4,1-8,2-16,3-32,4-64,5-128,6-256,7-512,8-1024
 # netG.load_state_dict(torch.load('./pre-model/GAN_GEN_SHADOW_8.pth',map_location=device)) #shadow的效果要好一些 
 
@@ -130,29 +130,29 @@ data = torch.utils.data.DataLoader(dataset=dataSet,batch_size=10,shuffle=True,nu
 # 	torch.save(netD2.state_dict(), resultPath1_2+'/D_model.pth')
 
 #---------------training with true image & noise-------------
-optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
-loss = torch.nn.MSELoss()
-#loss = torch.nn.BCELoss()
-loss_all=0
-for epoch in range(10):
-	for (i, batch) in enumerate(data):
-		#z_ = torch.randn(10, 512).to(device)
-		image = batch.to(device)
-		z = netD2(image,height=8,alpha=1)
-		z = z.squeeze(2).squeeze(2)
-		x_ = netG(z,depth=8,alpha=1) #A.这个去梯度，会没有效果, (训练结果基本不会发生改变)! B.用detach,G的梯度不受影响，也影响不到D,人脸不改变，但属性会跟着变 C.什么都不用，G会受当次影响发生改变,生成效果变化比较大
-		optimizer.zero_grad()
-		loss_i = loss(x_,image)
-		loss_i.backward()
-		optimizer.step()
-		loss_all +=loss_i.item()
-		if i % 100 == 0:
-			print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
-			#x_ = (x_+1)/2
-			img = torch.cat((image[:8],x_[:8]))
-			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
-	torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
-	torch.save(netD2.state_dict(), resultPath1_2+'/D_model.pth')
+# optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
+# loss = torch.nn.MSELoss()
+# #loss = torch.nn.BCELoss()
+# loss_all=0
+# for epoch in range(10):
+# 	for (i, batch) in enumerate(data):
+# 		#z_ = torch.randn(10, 512).to(device)
+# 		image = batch.to(device)
+# 		z = netD2(image,height=8,alpha=1)
+# 		z = z.squeeze(2).squeeze(2)
+# 		x_ = netG(z,depth=8,alpha=1) #A.这个去梯度，会没有效果, (训练结果基本不会发生改变)! B.用detach,G的梯度不受影响，也影响不到D,人脸不改变，但属性会跟着变 C.什么都不用，G会受当次影响发生改变,生成效果变化比较大
+# 		optimizer.zero_grad()
+# 		loss_i = loss(x_,image)
+# 		loss_i.backward()
+# 		optimizer.step()
+# 		loss_all +=loss_i.item()
+# 		if i % 100 == 0:
+# 			print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
+# 			#x_ = (x_+1)/2
+# 			img = torch.cat((image[:8],x_[:8]))
+# 			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
+# 	torch.save(netG.state_dict(), resultPath1_2+'/G_model.pth')
+# 	torch.save(netD2.state_dict(), resultPath1_2+'/D_model.pth')
 
 
 #---------------training with true image & compare z------------- 这个完全没有生成model collapse
@@ -183,7 +183,7 @@ for epoch in range(10):
 
 
 
-#--------------training with generative image------------share weight: good result!------------step2:no share weight:
+# --------------training with generative image------------share weight: good result!------------step2:no share weight:
 # optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
 # loss = torch.nn.MSELoss()
 # loss_all=0
@@ -210,6 +210,32 @@ for epoch in range(10):
 # 	torch.save(netG.state_dict(), resultPath1_2+'/G_model_ep%d.pth'%epoch)
 # 	torch.save(netD2.state_dict(), resultPath1_2+'/D_model_ep%d.pth'%epoch)
 
+
+--------------training with generative image------------: training G with D
+optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
+loss = torch.nn.MSELoss()
+loss_all=0
+for epoch in range(10):
+	for i in range(5001):
+		z = torch.randn(10, 512).to(device)
+		x = netG(z,depth=8,alpha=1)
+		z_ = netD2(x.detach(),height=8,alpha=1)
+		#z_ = netD2(x.detach()) #new_small_Net
+		z_ = z_.squeeze(2).squeeze(2)
+		x_ = netG(z_,depth=8,alpha=1)
+		optimizer.zero_grad()
+		loss_i = loss(x_,x)
+		loss_i.backward()
+		optimizer.step()
+		loss_all +=loss_i.item()
+		print('loss_all__:  '+str(loss_all)+'     loss_i:    '+str(loss_i.item()))
+		if i % 100 == 0: 
+			img = (torch.cat((x[:8],x_[:8]))+1)/2
+			torchvision.utils.save_image(img, resultPath1_1+'/ep%d_%d.jpg'%(epoch,i), nrow=8)
+			#torchvision.utils.save_image(x_[:8], resultPath1_1+'/%d_rc.jpg'%(epoch,i), nrow=8)
+	#if epoch%10==0 or epoch == 29:
+	torch.save(netG.state_dict(), resultPath1_2+'/G_model_ep%d.pth'%epoch)
+	torch.save(netD2.state_dict(), resultPath1_2+'/D_model_ep%d.pth'%epoch)
 
 
 
