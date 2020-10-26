@@ -211,7 +211,7 @@ data = torch.utils.data.DataLoader(dataset=dataSet,batch_size=10,shuffle=True,nu
 # 	torch.save(netD2.state_dict(), resultPath1_2+'/D_model_ep%d.pth'%epoch)
 
 
---------------training with generative image------------: training G with D
+#--------------training with generative image------------: training G with D
 optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
 loss = torch.nn.MSELoss()
 loss_all=0
