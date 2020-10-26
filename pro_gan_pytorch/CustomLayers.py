@@ -33,9 +33,7 @@ class _equalized_conv2d(torch.nn.Module):
         :param x: input
         :return: y => output
         """
-        return conv2d(input=x,weight=self.weight * self.scale,  # scale the weight on runtime
-                      bias=self.bias if self.use_bias else None,
-                      stride=self.stride, padding=self.pad)
+        return conv2d(input=x, weight=self.weight * self.scale, bias=self.bias if self.use_bias else None, stride=self.stride, padding=self.pad)
     def extra_repr(self):
         return ", ".join(map(str, self.weight.shape))
 
