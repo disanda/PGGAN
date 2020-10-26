@@ -212,6 +212,7 @@ data = torch.utils.data.DataLoader(dataset=dataSet,batch_size=10,shuffle=True,nu
 
 
 #--------------training with generative image------------: training G with D
+toggle_grad(netG)#关闭netG的梯度
 optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
 loss = torch.nn.MSELoss()
 loss_all=0

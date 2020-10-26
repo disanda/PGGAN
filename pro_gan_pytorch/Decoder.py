@@ -1,12 +1,79 @@
-import numpy as np
-import torch
 import torch.nn as nn
-from torch.nn import ModuleList, AvgPool2d
-from pro_gan_pytorch.CustomLayers import DisGeneralConvBlock, DisFinalBlock
+from CustomLayers import _equalized_conv2d, GenGeneralConvBlock, GenInitialBlock
 
-#和原网络中D对应的Encoder, 训练时G不变， v1只改了最后一层，v2是一个规模较小的网络
 
-# in: [-1,512] ,    out: [-1,3,1024,1024]
+#-----------------Decoder v1-----------:加一层全联接
+class Decoder_v1(torch.nn.Module):
+    def __init__(self, depth=7, latent_size=512, use_eql=True):
+        """
+        constructor for the Generator class
+        :param depth: required depth of the Network
+        :param latent_size: size of the latent manifold
+        :param use_eql: whether to use equalized learning rate
+        """
+        super().__init__()
+        assert latent_size != 0 and ((latent_size & (latent_size - 1)) == 0), "latent size not a power of 2"
+        if depth >= 4:
+            assert latent_size >= np.power(2, depth - 4), "latent size will diminish to zero"
+
+        # state of the generator:
+        self.use_eql = use_eql
+        self.depth = depth
+        self.latent_size = latent_size
+
+        slef.fc = nn.Linear(512,512)
+        
+
+        # register the modules required for the GAN
+        self.initial_block = GenInitialBlock(self.latent_size, use_eql=self.use_eql)
+
+        # create a module list of the other required general convolution blocks
+        self.layers = ModuleList([])  # initialize to empty list
+
+        # create the ToRGB layers for various outputs:
+        if self.use_eql:
+            self.toRGB = lambda in_channels: _equalized_conv2d(in_channels, 3, (1, 1), bias=True)
+        else:
+            self.toRGB = lambda in_channels: Conv2d(in_channels, 3, (1, 1), bias=True)
+        self.rgb_converters = ModuleList([self.toRGB(self.latent_size)])
+
+        # create the remaining layers
+        for i in range(self.depth - 1):
+            if i <= 2:
+                layer = GenGeneralConvBlock(self.latent_size,self.latent_size, use_eql=self.use_eql)
+                rgb = self.toRGB(self.latent_size)
+            else:
+                layer = GenGeneralConvBlock(int(self.latent_size // np.power(2, i - 3)),int(self.latent_size // np.power(2, i - 2)),use_eql=self.use_eql)
+                rgb = self.toRGB(int(self.latent_size // np.power(2, i - 2)))
+            self.layers.append(layer)
+            self.rgb_converters.append(rgb)
+        # register the temporary upsampler
+        self.temporaryUpsampler = lambda x: interpolate(x, scale_factor=2)
+
+    def forward(self, x, depth, alpha):
+        """
+        forward pass of the Generator
+        :param x: input noise
+        :param depth: current depth from where output is required
+        :param alpha: value of alpha for fade-in effect
+        :return: y => output
+        """
+        assert depth < self.depth, "Requested output depth cannot be produced"
+        y = self.initial_block(x)
+        if depth > 0:  #0是第一层
+            for block in self.layers[:depth - 1]:
+                y = block(y)
+            residual = self.rgb_converters[depth - 1](self.temporaryUpsampler(y))
+            straight = self.rgb_converters[depth](self.layers[depth - 1](y))
+            out = (alpha * straight) + ((1 - alpha) * residual)
+        else:
+            out = self.rgb_converters[0](y)
+
+        return out
+
+
+
+#---------------Encoder v1--------------:加一层全联接
 class Encoder_v1(torch.nn.Module):
     """ Discriminator of the GAN """
     def __init__(self, height=7, feature_size=512, use_eql=True):
@@ -83,25 +150,3 @@ class Encoder_v1(torch.nn.Module):
         #out = self.final_block(y)
         out = self.new_final(y)
         return out
-
-#in: [-1,3,1024,1024], out: [-1,512] 
-class encoder_v2(torch.nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.main = nn.Sequential(
-        nn.Conv2d(3,12,4,2,1,bias=False), # 1024->512
-        nn.LeakyReLU(0.2, inplace=True),
-        nn.Conv2d(12,12,4,2,1,bias=False),# 512->256
-        nn.BatchNorm2d(12),
-        nn.LeakyReLU(0.2, inplace=True),
-        nn.Conv2d(12,3,4,2,1,bias=False),# 256->128
-        nn.BatchNorm2d(3),
-        nn.LeakyReLU(0.2, inplace=True),
-        nn.Conv2d(3,1,4,2,1,bias=False),# 128->64*64=4096
-    )
-        self.fc = nn.Linear(4096,512)
-    def forward(self, x):
-        y1 = self.main(x)
-        y2 = y1.view(-1,4096)
-        y3 = self.fc(y2)
-        return y3
