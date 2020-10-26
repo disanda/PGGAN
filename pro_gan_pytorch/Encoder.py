@@ -7,7 +7,7 @@ from pro_gan_pytorch.CustomLayers import DisGeneralConvBlock, DisFinalBlock
 #和原网络中D对应的Encoder, 训练时G不变， v1只改了最后一层，v2是一个规模较小的网络
 
 # in: [-1,512] ,    out: [-1,3,1024,1024]
-class Encoder_v1(torch.nn.Module):
+class encoder_v1(torch.nn.Module):
     """ Discriminator of the GAN """
     def __init__(self, height=7, feature_size=512, use_eql=True):
         """
