@@ -87,7 +87,8 @@ for i,j in netG2.named_parameters():
 #--------------training with generative image------------: training G with D
 #optimizer = torch.optim.Adam(netD2.parameters(), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
 import itertools
-optimizer = torch.optim.Adam(itertools.chain(filter(lambda p: p.requires_grad, netG2.parameters()), filter(lambda p: p.requires_grad, netD2.parameters())),lr=0.0001,betas=(0.6, 0.95),amsgrad=True)
+#optimizer = torch.optim.Adam(itertools.chain(filter(lambda p: p.requires_grad, netG2.parameters()), filter(lambda p: p.requires_grad, netD2.parameters())),lr=0.0001,betas=(0.6, 0.95),amsgrad=True)
+optimizer = torch.optim.Adam(itertools.chain(netG2.parameters(),netD2.parameters()), lr=0.001 ,betas=(0, 0.99), eps=1e-8)
 loss = torch.nn.MSELoss()
 loss_all=0
 for epoch in range(10):
